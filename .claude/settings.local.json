@@ -1,0 +1,19 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(npm install:*)",
+      "Bash(npm run:*)",
+      "Bash(node -e \":*)",
+      "Bash(pkill -f \"node src/app.js\")",
+      "Bash(cmd /c \"taskkill /PID 16040 /F 2>&1\")",
+      "Bash(powershell -Command 'Stop-Process -Id 16040 -Force' 2)",
+      "Bash(1 sleep:*)",
+      "Bash(powershell -Command \"Stop-Process -Id \\(Get-NetTCPConnection -LocalPort 3001 -ErrorAction SilentlyContinue | Select-Object -First 1 -ExpandProperty OwningProcess\\) -Force -ErrorAction SilentlyContinue\")",
+      "Bash(BASE=\"c:/Users/Eldar/OneDrive - Engineering College LA/APRD/Projects/Project Ideas/FormaCar/frontend\")",
+      "Bash(mkdir -p \"$BASE/src/api\" \"$BASE/src/utils\" \"$BASE/src/components\" \"$BASE/src/styles\" \"$BASE/src/pages/site\" \"$BASE/src/pages/crm\")",
+      "Bash(powershell -Command \"Get-NetTCPConnection -LocalPort 3001 -ErrorAction SilentlyContinue | Select-Object -ExpandProperty OwningProcess\")",
+      "Bash(powershell -Command \"Stop-Process -Id 29368 -Force -ErrorAction SilentlyContinue; Start-Sleep 1; \\(Get-NetTCPConnection -LocalPort 3001 -ErrorAction SilentlyContinue\\) ? ''Still occupied'' : ''Port 3001 is free''\")",
+      "Bash(powershell -Command 'Stop-Process -Id 29368 -Force -ErrorAction SilentlyContinue' sleep 1 netstat -ano)"
+    ]
+  }
+}

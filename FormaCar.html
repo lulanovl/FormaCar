@@ -1,0 +1,1178 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>FormaCar — Premium Car Wash</title>
+<link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@400;500;600;700&family=Bebas+Neue&family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+:root {
+  --red: #d42b2b;
+  --red-dark: #a01e1e;
+  --red-glow: rgba(212,43,43,0.35);
+  --black: #080808;
+  --dark: #0f0f0f;
+  --card: #141414;
+  --border: #1f1f1f;
+  --border-red: rgba(212,43,43,0.3);
+  --white: #f0f0f0;
+  --gray: #666;
+  --silver: #b0b0b0;
+}
+
+*, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
+html { scroll-behavior:smooth; }
+body { font-family:'Inter', sans-serif; background:var(--black); color:var(--white); overflow-x:hidden; cursor:default; }
+
+/* ─── SCROLLBAR ─── */
+::-webkit-scrollbar { width:4px; }
+::-webkit-scrollbar-track { background:var(--black); }
+::-webkit-scrollbar-thumb { background:var(--red); }
+
+/* ─── NAV ─── */
+nav {
+  position:fixed; top:0; left:0; right:0; z-index:200;
+  display:flex; align-items:center; justify-content:space-between;
+  padding:0 3rem; height:64px;
+  background:rgba(8,8,8,0.96);
+  border-bottom:1px solid var(--border);
+  backdrop-filter:blur(12px);
+}
+.nav-logo {
+  display:flex; align-items:center; gap:0.8rem;
+  font-family:'Bebas Neue', sans-serif;
+  font-size:1.5rem; letter-spacing:0.12em; color:var(--white);
+  text-decoration:none;
+}
+.nav-logo .forma { color:var(--red); }
+.nav-logo .sub { font-family:'Rajdhani',sans-serif; font-size:0.6rem; letter-spacing:0.25em; color:var(--gray); display:block; line-height:1; margin-top:-4px; }
+nav ul { list-style:none; display:flex; gap:2rem; }
+nav ul a {
+  font-family:'Rajdhani',sans-serif; font-size:0.85rem; font-weight:500;
+  letter-spacing:0.2em; text-transform:uppercase; color:var(--silver);
+  text-decoration:none; transition:color 0.25s;
+}
+nav ul a:hover { color:var(--red); }
+.nav-right { display:flex; gap:0.8rem; align-items:center; }
+.btn-crm {
+  font-family:'Rajdhani',sans-serif; font-size:0.75rem; font-weight:600;
+  letter-spacing:0.15em; text-transform:uppercase;
+  background:none; border:1px solid var(--border); color:var(--gray);
+  padding:0.45rem 1rem; cursor:pointer; transition:all 0.25s;
+}
+.btn-crm:hover { border-color:var(--red); color:var(--red); }
+.btn-nav {
+  font-family:'Rajdhani',sans-serif; font-size:0.75rem; font-weight:700;
+  letter-spacing:0.15em; text-transform:uppercase;
+  background:var(--red); color:var(--white); border:none;
+  padding:0.5rem 1.4rem; cursor:pointer; transition:background 0.25s, box-shadow 0.25s;
+  clip-path: polygon(8px 0%, 100% 0%, calc(100% - 8px) 100%, 0% 100%);
+}
+.btn-nav:hover { background:var(--red-dark); box-shadow:0 0 20px var(--red-glow); }
+
+/* ─── VIEWS ─── */
+.view { display:none; }
+.view.active { display:block; }
+
+/* ══════════════════════════════
+   CLIENT SITE
+══════════════════════════════ */
+
+/* HERO */
+.hero {
+  min-height:100vh; display:flex; align-items:center;
+  padding:64px 3rem 0; position:relative; overflow:hidden;
+}
+/* Diagonal red stripe */
+.hero::before {
+  content:'';
+  position:absolute; top:0; right:-10%; bottom:0; width:50%;
+  background:linear-gradient(135deg, transparent 30%, rgba(212,43,43,0.04) 50%, transparent 70%);
+  transform:skewX(-8deg);
+}
+/* Grid lines */
+.hero-grid {
+  position:absolute; inset:0; overflow:hidden; opacity:0.07;
+  background-image:
+    linear-gradient(var(--red) 1px, transparent 1px),
+    linear-gradient(90deg, var(--red) 1px, transparent 1px);
+  background-size:60px 60px;
+  mask-image:radial-gradient(ellipse at 70% 50%, black 0%, transparent 65%);
+}
+/* Animated scan line */
+.scan-line {
+  position:absolute; left:0; right:0; height:1px;
+  background:linear-gradient(90deg, transparent, var(--red), transparent);
+  opacity:0.4; animation:scan 4s ease-in-out infinite;
+}
+@keyframes scan {
+  0% { top:20%; opacity:0; }
+  20% { opacity:0.4; }
+  80% { opacity:0.4; }
+  100% { top:80%; opacity:0; }
+}
+
+.hero-content { position:relative; z-index:2; max-width:680px; }
+
+.hero-eyebrow {
+  display:inline-flex; align-items:center; gap:0.8rem;
+  font-family:'Rajdhani',sans-serif; font-size:0.72rem; font-weight:600;
+  letter-spacing:0.35em; text-transform:uppercase; color:var(--red);
+  margin-bottom:1.5rem;
+}
+.hero-eyebrow::before {
+  content:''; display:block; width:32px; height:2px; background:var(--red);
+}
+
+.hero h1 {
+  font-family:'Bebas Neue', sans-serif;
+  font-size:clamp(4rem, 9vw, 8rem);
+  line-height:0.9; letter-spacing:0.04em;
+  margin-bottom:1.5rem;
+}
+.hero h1 .line1 { color:var(--white); display:block; }
+.hero h1 .line2 { color:var(--red); display:block; text-shadow:0 0 40px var(--red-glow); }
+.hero h1 .line3 { color:var(--silver); display:block; font-size:0.55em; letter-spacing:0.12em; }
+
+.hero-sub {
+  font-size:0.95rem; line-height:1.8; color:var(--gray);
+  max-width:420px; margin-bottom:2.5rem; font-weight:300;
+}
+
+.hero-actions { display:flex; gap:1rem; align-items:center; flex-wrap:wrap; }
+.btn-primary {
+  font-family:'Rajdhani',sans-serif; font-size:0.85rem; font-weight:700;
+  letter-spacing:0.2em; text-transform:uppercase;
+  background:var(--red); color:var(--white); border:none;
+  padding:1rem 2.5rem; cursor:pointer;
+  clip-path: polygon(12px 0%, 100% 0%, calc(100% - 12px) 100%, 0% 100%);
+  transition:background 0.25s, box-shadow 0.4s;
+  position:relative;
+}
+.btn-primary::after {
+  content:''; position:absolute; inset:0;
+  background:linear-gradient(135deg, rgba(255,255,255,0.1) 0%, transparent 60%);
+}
+.btn-primary:hover { background:var(--red-dark); box-shadow:0 0 40px var(--red-glow); }
+.btn-ghost {
+  font-family:'Rajdhani',sans-serif; font-size:0.85rem; font-weight:600;
+  letter-spacing:0.2em; text-transform:uppercase;
+  background:none; border:1px solid var(--border); color:var(--silver);
+  padding:1rem 2rem; cursor:pointer; transition:border-color 0.25s, color 0.25s;
+}
+.btn-ghost:hover { border-color:var(--red); color:var(--red); }
+
+/* Hero right — car silhouette SVG */
+.hero-visual {
+  position:absolute; right:0; top:50%; transform:translateY(-50%);
+  width:55%; max-width:800px; z-index:1; opacity:0.85;
+  pointer-events:none;
+}
+.hero-visual svg { width:100%; }
+
+/* Stats bar */
+.stats-bar {
+  position:absolute; bottom:0; left:0; right:0; z-index:2;
+  border-top:1px solid var(--border);
+  display:grid; grid-template-columns:repeat(4,1fr);
+  background:rgba(8,8,8,0.85); backdrop-filter:blur(8px);
+}
+.stat-item {
+  padding:1.2rem 2rem;
+  border-right:1px solid var(--border);
+  display:flex; align-items:center; gap:1rem;
+}
+.stat-item:last-child { border-right:none; }
+.stat-num { font-family:'Bebas Neue',sans-serif; font-size:2rem; color:var(--red); line-height:1; }
+.stat-label { font-family:'Rajdhani',sans-serif; font-size:0.7rem; font-weight:500; letter-spacing:0.15em; text-transform:uppercase; color:var(--gray); }
+
+/* ─── SECTION BASE ─── */
+.section { padding:5rem 3rem; }
+.section-label {
+  font-family:'Rajdhani',sans-serif; font-size:0.7rem; font-weight:600;
+  letter-spacing:0.35em; text-transform:uppercase; color:var(--red);
+  display:flex; align-items:center; gap:0.8rem; margin-bottom:1rem;
+}
+.section-label::before { content:''; width:24px; height:2px; background:var(--red); display:block; }
+.section-title {
+  font-family:'Bebas Neue',sans-serif;
+  font-size:clamp(2.5rem,5vw,4rem); letter-spacing:0.05em;
+  line-height:1; margin-bottom:3rem; color:var(--white);
+}
+.section-title .accent { color:var(--red); }
+
+/* ─── SERVICES ─── */
+.services-bg { background:var(--dark); }
+.services-grid {
+  display:grid; grid-template-columns:repeat(3,1fr);
+  gap:1px; background:var(--border);
+  border:1px solid var(--border);
+}
+.service-card {
+  background:var(--card); padding:2.5rem;
+  position:relative; overflow:hidden; cursor:pointer;
+  transition:background 0.3s;
+}
+.service-card::before {
+  content:''; position:absolute; top:0; left:0; right:0; height:3px;
+  background:var(--red); transform:scaleX(0); transform-origin:left;
+  transition:transform 0.4s cubic-bezier(0.4,0,0.2,1);
+}
+.service-card::after {
+  content:''; position:absolute; bottom:-60px; right:-60px;
+  width:160px; height:160px; border-radius:50%;
+  background:radial-gradient(circle, var(--red-glow) 0%, transparent 70%);
+  opacity:0; transition:opacity 0.4s;
+}
+.service-card:hover { background:#181818; }
+.service-card:hover::before { transform:scaleX(1); }
+.service-card:hover::after { opacity:1; }
+
+.service-num {
+  font-family:'Bebas Neue',sans-serif; font-size:4rem; line-height:1;
+  color:rgba(212,43,43,0.12); margin-bottom:0.5rem; display:block;
+  letter-spacing:0.05em;
+}
+.service-icon { font-size:2rem; margin-bottom:1rem; display:block; }
+.service-name {
+  font-family:'Rajdhani',sans-serif; font-size:1.4rem; font-weight:700;
+  letter-spacing:0.1em; text-transform:uppercase; margin-bottom:0.8rem;
+  color:var(--white);
+}
+.service-desc { font-size:0.85rem; line-height:1.7; color:var(--gray); margin-bottom:1.8rem; }
+
+.service-features { list-style:none; margin-bottom:2rem; }
+.service-features li {
+  font-size:0.82rem; color:#555; padding:0.4rem 0;
+  border-bottom:1px solid var(--border);
+  display:flex; align-items:center; gap:0.6rem;
+  transition:color 0.25s;
+}
+.service-card:hover .service-features li { color:#888; }
+.service-features li::before { content:'▸'; color:var(--red); font-size:0.6rem; flex-shrink:0; }
+
+.service-footer { display:flex; align-items:center; justify-content:space-between; }
+.service-price {
+  font-family:'Bebas Neue',sans-serif; font-size:2rem; letter-spacing:0.05em;
+  color:var(--red);
+}
+.service-price small { font-family:'Rajdhani',sans-serif; font-size:0.7rem; color:var(--gray); letter-spacing:0.1em; }
+.service-price.tbd { font-size:1rem; font-family:'Rajdhani',sans-serif; letter-spacing:0.15em; color:var(--gray); }
+
+.btn-pick {
+  font-family:'Rajdhani',sans-serif; font-size:0.7rem; font-weight:700;
+  letter-spacing:0.15em; text-transform:uppercase;
+  background:none; border:1px solid var(--border-red); color:var(--red);
+  padding:0.55rem 1.1rem; cursor:pointer; transition:all 0.25s;
+  clip-path: polygon(6px 0%,100% 0%,calc(100% - 6px) 100%,0% 100%);
+}
+.btn-pick:hover { background:var(--red); color:var(--white); border-color:var(--red); box-shadow:0 0 20px var(--red-glow); }
+
+/* ─── BOOKING ─── */
+.booking-wrap {
+  max-width:900px; margin:0 auto;
+  border:1px solid var(--border); background:var(--card);
+}
+.booking-header {
+  padding:2rem 2.5rem;
+  border-bottom:1px solid var(--border);
+  display:flex; align-items:center; justify-content:space-between;
+  background:linear-gradient(90deg, rgba(212,43,43,0.06) 0%, transparent 100%);
+}
+.booking-header h3 {
+  font-family:'Bebas Neue',sans-serif; font-size:1.8rem; letter-spacing:0.08em; color:var(--white);
+}
+.booking-header p { font-size:0.8rem; color:var(--gray); margin-top:0.2rem; }
+.booking-step {
+  font-family:'Rajdhani',sans-serif; font-size:0.65rem; font-weight:600;
+  letter-spacing:0.2em; color:var(--red); text-transform:uppercase;
+}
+
+.booking-body { padding:2.5rem; }
+.form-grid { display:grid; grid-template-columns:1fr 1fr; gap:1.2rem; }
+.form-field { display:flex; flex-direction:column; gap:0.4rem; }
+.form-field.full { grid-column:span 2; }
+.form-field label {
+  font-family:'Rajdhani',sans-serif; font-size:0.65rem; font-weight:600;
+  letter-spacing:0.25em; text-transform:uppercase; color:var(--gray);
+}
+.form-field input, .form-field select, .form-field textarea {
+  background:#0c0c0c; border:1px solid var(--border);
+  color:var(--white); padding:0.85rem 1rem;
+  font-family:'Inter',sans-serif; font-size:0.9rem; outline:none;
+  transition:border-color 0.25s, box-shadow 0.25s;
+  appearance:none; -webkit-appearance:none; border-radius:0;
+}
+.form-field input:focus, .form-field select:focus, .form-field textarea:focus {
+  border-color:var(--red); box-shadow:0 0 0 2px rgba(212,43,43,0.12);
+}
+.form-field select option { background:#111; }
+.form-field input::placeholder { color:#333; }
+
+/* Time grid */
+.time-grid { display:grid; grid-template-columns:repeat(5,1fr); gap:0.5rem; }
+.time-btn {
+  font-family:'Rajdhani',sans-serif; font-size:0.85rem; font-weight:600;
+  letter-spacing:0.1em; padding:0.65rem 0.5rem; text-align:center;
+  border:1px solid var(--border); background:#0c0c0c; color:var(--silver);
+  cursor:pointer; transition:all 0.2s;
+  clip-path: polygon(5px 0%,100% 0%,calc(100% - 5px) 100%,0% 100%);
+}
+.time-btn:hover { border-color:var(--red); color:var(--red); }
+.time-btn.taken { opacity:0.25; cursor:not-allowed; color:var(--gray); text-decoration:line-through; }
+.time-btn.selected { background:var(--red); border-color:var(--red); color:var(--white); box-shadow:0 0 16px var(--red-glow); }
+
+/* Summary */
+.booking-summary {
+  margin-top:1.5rem; padding:1.2rem 1.5rem;
+  background:#0c0c0c; border:1px solid var(--border-red);
+  display:none;
+}
+.booking-summary.visible { display:block; }
+.sum-row { display:flex; justify-content:space-between; align-items:center; padding:0.4rem 0; font-size:0.85rem; color:var(--gray); border-bottom:1px solid var(--border); }
+.sum-row:last-child { border:none; padding-top:0.8rem; }
+.sum-row.total { font-family:'Bebas Neue',sans-serif; font-size:1.4rem; letter-spacing:0.06em; color:var(--red); }
+.sum-row.total span:last-child { color:var(--red); }
+
+.btn-submit {
+  width:100%; margin-top:1.5rem;
+  font-family:'Bebas Neue',sans-serif; font-size:1.2rem; letter-spacing:0.15em;
+  background:var(--red); color:var(--white); border:none;
+  padding:1.1rem; cursor:pointer;
+  clip-path: polygon(16px 0%,100% 0%,calc(100% - 16px) 100%,0% 100%);
+  transition:background 0.25s, box-shadow 0.4s;
+  position:relative; overflow:hidden;
+}
+.btn-submit::before {
+  content:''; position:absolute; top:0; left:-100%; width:100%; height:100%;
+  background:linear-gradient(90deg, transparent, rgba(255,255,255,0.1), transparent);
+  transition:left 0.5s;
+}
+.btn-submit:hover { background:var(--red-dark); box-shadow:0 0 40px var(--red-glow); }
+.btn-submit:hover::before { left:100%; }
+
+.success-panel {
+  display:none; text-align:center; padding:3rem;
+  border:1px solid rgba(212,43,43,0.3);
+  background:rgba(212,43,43,0.05);
+}
+.success-panel.visible { display:block; }
+.success-panel .check { font-size:3rem; margin-bottom:1rem; }
+.success-panel h3 { font-family:'Bebas Neue',sans-serif; font-size:2rem; letter-spacing:0.1em; color:var(--red); margin-bottom:0.5rem; }
+.success-panel p { color:var(--gray); font-size:0.9rem; }
+
+/* ─── WHY ─── */
+.why-grid { display:grid; grid-template-columns:1fr 1fr; gap:1px; background:var(--border); }
+.why-item {
+  background:var(--dark); padding:2.5rem;
+  border-left:3px solid transparent; transition:border-color 0.3s, background 0.3s;
+}
+.why-item:hover { border-left-color:var(--red); background:var(--card); }
+.why-icon { font-size:2rem; margin-bottom:1rem; }
+.why-title { font-family:'Rajdhani',sans-serif; font-size:1rem; font-weight:700; letter-spacing:0.15em; text-transform:uppercase; margin-bottom:0.5rem; color:var(--white); }
+.why-desc { font-size:0.85rem; color:var(--gray); line-height:1.65; }
+
+/* ─── FOOTER ─── */
+footer {
+  background:var(--dark); border-top:1px solid var(--border);
+  padding:3rem 3rem 2rem;
+}
+.footer-top { display:grid; grid-template-columns:2fr 1fr 1fr; gap:3rem; margin-bottom:2rem; }
+.footer-logo {
+  font-family:'Bebas Neue',sans-serif; font-size:1.8rem; letter-spacing:0.1em;
+  margin-bottom:0.8rem; display:block;
+}
+.footer-logo .forma { color:var(--red); }
+.footer-desc { font-size:0.82rem; color:var(--gray); line-height:1.7; max-width:240px; }
+.footer-col-title { font-family:'Rajdhani',sans-serif; font-size:0.65rem; font-weight:700; letter-spacing:0.3em; text-transform:uppercase; color:var(--red); margin-bottom:1rem; }
+.footer-col ul { list-style:none; }
+.footer-col ul li { margin-bottom:0.5rem; }
+.footer-col ul a { font-size:0.85rem; color:var(--gray); text-decoration:none; transition:color 0.25s; }
+.footer-col ul a:hover { color:var(--red); }
+.footer-bottom { border-top:1px solid var(--border); padding-top:1.5rem; display:flex; justify-content:space-between; align-items:center; }
+.footer-bottom p { font-size:0.75rem; color:#333; }
+.footer-red { color:var(--red); }
+
+/* ══════════════════════════════
+   CRM PANEL
+══════════════════════════════ */
+.crm-wrap { display:grid; grid-template-columns:220px 1fr; min-height:100vh; background:var(--black); }
+
+.crm-sidebar {
+  background:var(--dark); border-right:1px solid var(--border);
+  padding:1.5rem 0; position:sticky; top:64px; height:calc(100vh - 64px); overflow-y:auto;
+}
+.crm-sidebar-logo { padding:0 1.5rem 1.5rem; border-bottom:1px solid var(--border); margin-bottom:1rem; }
+.crm-sidebar-logo .sub { font-family:'Rajdhani',sans-serif; font-size:0.6rem; letter-spacing:0.2em; color:var(--gray); text-transform:uppercase; }
+
+.crm-group-label { font-family:'Rajdhani',sans-serif; font-size:0.58rem; font-weight:700; letter-spacing:0.3em; text-transform:uppercase; color:#2a2a2a; padding:0 1.5rem; margin:1rem 0 0.5rem; }
+.crm-btn {
+  display:flex; align-items:center; gap:0.8rem; width:100%;
+  padding:0.75rem 1.5rem; background:none; border:none; cursor:pointer;
+  font-family:'Rajdhani',sans-serif; font-size:0.85rem; font-weight:500; letter-spacing:0.1em;
+  color:var(--gray); text-align:left; transition:background 0.2s, color 0.2s;
+  border-left:2px solid transparent;
+  text-transform:uppercase;
+}
+.crm-btn:hover { background:rgba(212,43,43,0.06); color:var(--silver); }
+.crm-btn.active { background:rgba(212,43,43,0.1); color:var(--red); border-left-color:var(--red); }
+.crm-btn .ico { font-size:0.9rem; width:18px; text-align:center; flex-shrink:0; }
+
+.crm-main { padding:2rem; overflow-y:auto; }
+
+/* KPI */
+.kpi-row { display:grid; grid-template-columns:repeat(4,1fr); gap:1px; background:var(--border); margin-bottom:2rem; }
+.kpi {
+  background:var(--dark); padding:1.5rem;
+  border-top:2px solid transparent; transition:border-color 0.3s;
+  position:relative;
+}
+.kpi:hover { border-top-color:var(--red); }
+.kpi-label { font-family:'Rajdhani',sans-serif; font-size:0.62rem; font-weight:700; letter-spacing:0.2em; text-transform:uppercase; color:var(--gray); margin-bottom:0.8rem; }
+.kpi-val { font-family:'Bebas Neue',sans-serif; font-size:2.4rem; letter-spacing:0.04em; color:var(--white); line-height:1; margin-bottom:0.3rem; }
+.kpi-delta { font-family:'Rajdhani',sans-serif; font-size:0.75rem; font-weight:500; color:#4caf7d; }
+.kpi-delta.neg { color:var(--red); }
+
+/* Chart */
+.chart-row { display:grid; grid-template-columns:2fr 1fr; gap:1px; background:var(--border); margin-bottom:2rem; }
+.crm-box { background:var(--dark); padding:1.5rem; }
+.crm-box-title { font-family:'Rajdhani',sans-serif; font-size:0.65rem; font-weight:700; letter-spacing:0.25em; text-transform:uppercase; color:var(--gray); padding-bottom:1rem; border-bottom:1px solid var(--border); margin-bottom:1.2rem; }
+.bars { display:flex; align-items:flex-end; gap:6px; height:100px; }
+.bar-col { flex:1; display:flex; flex-direction:column; align-items:center; gap:4px; height:100%; justify-content:flex-end; }
+.bar-fill { width:100%; background:var(--border); position:relative; min-height:3px; transition:background 0.3s; cursor:pointer; border-top:1px solid transparent; }
+.bar-fill:hover { background:rgba(212,43,43,0.4); border-top-color:var(--red); }
+.bar-fill.today { background:rgba(212,43,43,0.7); border-top:2px solid var(--red); }
+.bar-lbl { font-family:'Rajdhani',sans-serif; font-size:0.6rem; color:var(--gray); }
+
+/* Orders table */
+.crm-table-wrap { background:var(--dark); border:1px solid var(--border); margin-bottom:2rem; }
+.crm-table-header { padding:1rem 1.5rem; border-bottom:1px solid var(--border); display:flex; align-items:center; justify-content:space-between; }
+.crm-table-title { font-family:'Rajdhani',sans-serif; font-size:0.8rem; font-weight:700; letter-spacing:0.15em; text-transform:uppercase; color:var(--white); }
+.filters { display:flex; gap:4px; }
+.f-btn { font-family:'Rajdhani',sans-serif; font-size:0.62rem; font-weight:600; letter-spacing:0.1em; text-transform:uppercase; border:1px solid var(--border); color:var(--gray); background:none; padding:0.35rem 0.8rem; cursor:pointer; transition:all 0.2s; }
+.f-btn.on { border-color:var(--red); color:var(--red); }
+.f-btn:hover { border-color:var(--red); color:var(--red); }
+
+table { width:100%; border-collapse:collapse; }
+th { font-family:'Rajdhani',sans-serif; font-size:0.6rem; font-weight:700; letter-spacing:0.2em; text-transform:uppercase; color:var(--gray); padding:0.8rem 1.2rem; text-align:left; border-bottom:1px solid var(--border); white-space:nowrap; }
+td { padding:0.9rem 1.2rem; font-size:0.83rem; border-bottom:1px solid rgba(31,31,31,0.6); vertical-align:middle; }
+tr:last-child td { border-bottom:none; }
+tr:hover td { background:rgba(212,43,43,0.03); }
+.td-num { font-family:'Rajdhani',sans-serif; font-size:0.75rem; color:var(--gray); letter-spacing:0.1em; }
+.td-price { font-family:'Bebas Neue',sans-serif; font-size:1.1rem; letter-spacing:0.05em; color:var(--red); }
+
+.badge {
+  font-family:'Rajdhani',sans-serif; font-size:0.6rem; font-weight:700;
+  letter-spacing:0.15em; text-transform:uppercase;
+  padding:0.28rem 0.7rem; display:inline-block;
+  clip-path: polygon(4px 0%,100% 0%,calc(100% - 4px) 100%,0% 100%);
+}
+.badge-new { background:rgba(212,43,43,0.15); color:var(--red); }
+.badge-wip { background:rgba(66,133,244,0.15); color:#64b5f6; }
+.badge-done { background:rgba(76,175,125,0.15); color:#4caf7d; }
+
+.act-btn { font-family:'Rajdhani',sans-serif; font-size:0.6rem; font-weight:600; letter-spacing:0.1em; text-transform:uppercase; border:1px solid var(--border); color:var(--gray); background:none; padding:0.3rem 0.6rem; cursor:pointer; transition:all 0.2s; margin-right:4px; }
+.act-btn:hover { border-color:var(--red); color:var(--red); }
+.act-btn.ok { border-color:rgba(76,175,125,0.3); color:#4caf7d; }
+.act-btn.ok:hover { background:rgba(76,175,125,0.1); }
+
+/* Calendar */
+.cal-grid { display:grid; grid-template-columns:repeat(7,1fr); gap:3px; }
+.cal-hdr { font-family:'Rajdhani',sans-serif; font-size:0.62rem; font-weight:700; letter-spacing:0.1em; text-transform:uppercase; color:var(--gray); text-align:center; padding:0.4rem; }
+.cal-d { font-size:0.8rem; text-align:center; padding:0.6rem 0.3rem; cursor:pointer; border:1px solid transparent; transition:all 0.2s; border-radius:0; position:relative; }
+.cal-d:hover { border-color:var(--border-red); color:var(--red); }
+.cal-d.today { color:var(--red); font-weight:700; }
+.cal-d.sel { background:var(--red); color:var(--white); }
+.cal-d.has::after { content:''; position:absolute; bottom:3px; left:50%; transform:translateX(-50%); width:4px; height:4px; background:var(--red); border-radius:50%; }
+.cal-d.empty { opacity:0; pointer-events:none; }
+
+/* Clients */
+.client-row td:first-child { font-weight:500; }
+
+/* panels */
+.crm-panel { display:none; }
+.crm-panel.on { display:block; }
+
+/* ─── MODAL ─── */
+.modal-bg { display:none; position:fixed; inset:0; z-index:300; background:rgba(0,0,0,0.88); backdrop-filter:blur(6px); align-items:center; justify-content:center; }
+.modal-bg.open { display:flex; }
+.modal-box {
+  background:var(--dark); border:1px solid var(--border);
+  max-width:460px; width:90%; padding:2.5rem; position:relative;
+  border-top:2px solid var(--red);
+  animation:mIn 0.3s ease;
+}
+@keyframes mIn { from { opacity:0; transform:translateY(16px); } }
+.modal-x { position:absolute; top:1rem; right:1rem; background:none; border:none; color:var(--gray); font-size:1.3rem; cursor:pointer; }
+.modal-x:hover { color:var(--red); }
+.modal-title { font-family:'Bebas Neue',sans-serif; font-size:1.8rem; letter-spacing:0.08em; margin-bottom:0.3rem; }
+.modal-sub { font-size:0.8rem; color:var(--gray); margin-bottom:1.5rem; }
+.mform { display:flex; flex-direction:column; gap:0.8rem; }
+.mform input, .mform select {
+  background:#0c0c0c; border:1px solid var(--border); color:var(--white);
+  padding:0.8rem 1rem; font-family:'Inter',sans-serif; font-size:0.88rem; outline:none;
+  transition:border-color 0.25s; appearance:none; -webkit-appearance:none;
+}
+.mform input:focus, .mform select:focus { border-color:var(--red); }
+.mform .btn-primary { font-family:'Rajdhani',sans-serif; font-size:0.85rem; font-weight:700; letter-spacing:0.15em; clip-path:none; }
+
+@media (max-width:900px) {
+  nav { padding:0 1.5rem; }
+  nav ul { display:none; }
+  .hero { padding:64px 1.5rem 0; }
+  .hero-visual { display:none; }
+  .hero h1 { font-size:3.5rem; }
+  .stats-bar { grid-template-columns:repeat(2,1fr); }
+  .services-grid { grid-template-columns:1fr; }
+  .section { padding:3.5rem 1.5rem; }
+  .form-grid { grid-template-columns:1fr; }
+  .form-field.full { grid-column:span 1; }
+  .time-grid { grid-template-columns:repeat(4,1fr); }
+  .why-grid { grid-template-columns:1fr; }
+  .footer-top { grid-template-columns:1fr 1fr; }
+  .crm-wrap { grid-template-columns:1fr; }
+  .crm-sidebar { display:none; }
+  .kpi-row { grid-template-columns:repeat(2,1fr); }
+  .chart-row { grid-template-columns:1fr; }
+}
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <div class="nav-logo">
+    <div>
+      <span><span class="forma">Forma</span>Car</span>
+      <span class="sub">Premium Car Wash</span>
+    </div>
+  </div>
+  <ul>
+    <li><a href="#services">Услуги</a></li>
+    <li><a href="#booking">Запись</a></li>
+    <li><a href="#why">О нас</a></li>
+    <li><a href="#contact">Контакты</a></li>
+  </ul>
+  <div class="nav-right">
+    <button class="btn-crm" onclick="showCRM()">⚙ Панель</button>
+    <button class="btn-nav" onclick="goBook()">Записаться</button>
+  </div>
+</nav>
+
+<!-- ══ CLIENT SITE ══ -->
+<div id="siteView" class="view active">
+
+  <!-- HERO -->
+  <section class="hero">
+    <div class="hero-grid"></div>
+    <div class="scan-line"></div>
+
+    <div class="hero-content">
+      <div class="hero-eyebrow">Премиальная автомойка · Бишкек</div>
+      <h1>
+        <span class="line1">ЧИСТОТА</span>
+        <span class="line2">ВЫСОКОГО</span>
+        <span class="line3">КЛАССА</span>
+      </h1>
+      <p class="hero-sub">FormaCar — профессиональный уход за вашим автомобилем. Запишитесь онлайн, выберите удобное время и приезжайте без очереди.</p>
+      <div class="hero-actions">
+        <button class="btn-primary" onclick="goBook()">Записаться онлайн</button>
+        <button class="btn-ghost" onclick="document.getElementById('services').scrollIntoView({behavior:'smooth'})">Наши услуги</button>
+      </div>
+    </div>
+
+    <!-- Car silhouette -->
+    <div class="hero-visual">
+      <svg viewBox="0 0 900 400" xmlns="http://www.w3.org/2000/svg">
+        <defs>
+          <linearGradient id="carGrad" x1="0" y1="0" x2="1" y2="1">
+            <stop offset="0%" stop-color="#555"/>
+            <stop offset="50%" stop-color="#e0e0e0"/>
+            <stop offset="100%" stop-color="#333"/>
+          </linearGradient>
+          <linearGradient id="redLine" x1="0" y1="0" x2="1" y2="0">
+            <stop offset="0%" stop-color="transparent"/>
+            <stop offset="40%" stop-color="#d42b2b"/>
+            <stop offset="100%" stop-color="#d42b2b"/>
+          </linearGradient>
+          <filter id="glow"><feGaussianBlur stdDeviation="3" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+        </defs>
+        <!-- Ground shadow -->
+        <ellipse cx="450" cy="370" rx="380" ry="18" fill="rgba(212,43,43,0.12)"/>
+        <!-- Car body -->
+        <path d="M80,300 L80,240 Q100,200 160,180 L300,155 Q380,100 480,95 Q580,90 640,110 L760,150 Q820,165 840,200 L850,240 L850,300 Z"
+              fill="url(#carGrad)" opacity="0.9"/>
+        <!-- Roof -->
+        <path d="M280,158 Q340,95 460,88 Q560,82 620,108 L750,148 Q680,145 620,140 Q520,130 440,125 Q360,118 280,158Z"
+              fill="#c0c0c0" opacity="0.7"/>
+        <!-- Windows -->
+        <path d="M310,160 Q340,105 420,100 L490,100 L500,158Z" fill="rgba(212,43,43,0.25)" stroke="rgba(212,43,43,0.4)" stroke-width="1"/>
+        <path d="M510,158 L508,100 Q575,96 630,115 L700,148Z" fill="rgba(212,43,43,0.2)" stroke="rgba(212,43,43,0.35)" stroke-width="1"/>
+        <!-- Red accent stripe -->
+        <path d="M80,255 L850,255" stroke="url(#redLine)" stroke-width="2.5" filter="url(#glow)"/>
+        <!-- Wheels -->
+        <circle cx="220" cy="305" r="55" fill="#1a1a1a" stroke="#333" stroke-width="3"/>
+        <circle cx="220" cy="305" r="32" fill="#222" stroke="var(--red)" stroke-width="1.5"/>
+        <circle cx="220" cy="305" r="10" fill="#111"/>
+        <circle cx="680" cy="305" r="55" fill="#1a1a1a" stroke="#333" stroke-width="3"/>
+        <circle cx="680" cy="305" r="32" fill="#222" stroke="var(--red)" stroke-width="1.5"/>
+        <circle cx="680" cy="305" r="10" fill="#111"/>
+        <!-- Headlight glow -->
+        <ellipse cx="845" cy="220" rx="20" ry="14" fill="rgba(212,43,43,0.6)" filter="url(#glow)"/>
+        <!-- Water drops -->
+        <circle cx="350" cy="130" r="3" fill="rgba(100,180,255,0.6)"/>
+        <circle cx="420" cy="105" r="2" fill="rgba(100,180,255,0.5)"/>
+        <circle cx="560" cy="100" r="2.5" fill="rgba(100,180,255,0.55)"/>
+        <circle cx="650" cy="125" r="2" fill="rgba(100,180,255,0.5)"/>
+      </svg>
+    </div>
+
+    <div class="stats-bar">
+      <div class="stat-item">
+        <div><div class="stat-num">1200+</div><div class="stat-label">Клиентов</div></div>
+      </div>
+      <div class="stat-item">
+        <div><div class="stat-num">4.9</div><div class="stat-label">Рейтинг</div></div>
+      </div>
+      <div class="stat-item">
+        <div><div class="stat-num">3</div><div class="stat-label">Года на рынке</div></div>
+      </div>
+      <div class="stat-item">
+        <div><div class="stat-num">100%</div><div class="stat-label">Гарантия</div></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SERVICES -->
+  <section id="services" class="section services-bg">
+    <div class="section-label">Услуги</div>
+    <div class="section-title">ВЫБЕРИТЕ <span class="accent">ПРОГРАММУ</span></div>
+    <div class="services-grid">
+
+      <div class="service-card" onclick="pickService('Экспресс-мойка','')">
+        <span class="service-num">01</span>
+        <span class="service-icon">⚡</span>
+        <div class="service-name">Экспресс</div>
+        <div class="service-desc">Быстрая наружная мойка кузова. Без очередей. Идеально для ежедневного поддержания чистоты.</div>
+        <ul class="service-features">
+          <li>Мойка кузова под давлением</li>
+          <li>Чистка дисков и арок</li>
+          <li>Сушка микрофиброй</li>
+          <li>Мойка стёкол</li>
+        </ul>
+        <div class="service-footer">
+          <div class="service-price tbd">Цена по запросу</div>
+          <button class="btn-pick" onclick="event.stopPropagation();pickService('Экспресс-мойка','')">Выбрать</button>
+        </div>
+      </div>
+
+      <div class="service-card" onclick="pickService('Комплексная мойка','')" style="border-top:3px solid var(--red)">
+        <div style="font-family:'Rajdhani',sans-serif;font-size:0.6rem;font-weight:700;letter-spacing:0.25em;text-transform:uppercase;color:var(--red);margin-bottom:0.5rem">★ ПОПУЛЯРНЫЙ</div>
+        <span class="service-num">02</span>
+        <span class="service-icon">✨</span>
+        <div class="service-name">Комплексная</div>
+        <div class="service-desc">Полный уход снаружи и внутри. Профессиональная химия. Ваш автомобиль как новый.</div>
+        <ul class="service-features">
+          <li>Полная наружная мойка</li>
+          <li>Химчистка салона</li>
+          <li>Полировка кузова</li>
+          <li>Обработка резины</li>
+          <li>Ароматизация</li>
+        </ul>
+        <div class="service-footer">
+          <div class="service-price tbd">Цена по запросу</div>
+          <button class="btn-pick" onclick="event.stopPropagation();pickService('Комплексная мойка','')">Выбрать</button>
+        </div>
+      </div>
+
+      <div class="service-card" onclick="pickService('Детейлинг','')">
+        <span class="service-num">03</span>
+        <span class="service-icon">💎</span>
+        <div class="service-name">Детейлинг</div>
+        <div class="service-desc">Профессиональный детейлинг полного цикла. Нанокерамика, машинная полировка. Максимальная защита.</div>
+        <ul class="service-features">
+          <li>Машинная полировка кузова</li>
+          <li>Нанокерамическое покрытие</li>
+          <li>Глубокая химчистка</li>
+          <li>Обработка кожи</li>
+          <li>Озонирование</li>
+          <li>Финальная инспекция</li>
+        </ul>
+        <div class="service-footer">
+          <div class="service-price tbd">Цена по запросу</div>
+          <button class="btn-pick" onclick="event.stopPropagation();pickService('Детейлинг','')">Выбрать</button>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- BOOKING -->
+  <section id="booking" class="section">
+    <div class="section-label">Онлайн-запись</div>
+    <div class="section-title">ЗАПИСАТЬСЯ <span class="accent">БЕЗ ОЧЕРЕДИ</span></div>
+
+    <div class="booking-wrap">
+      <div class="booking-header">
+        <div>
+          <h3>ФОРМА ЗАПИСИ</h3>
+          <p>Заполните данные — мы подтвердим запись в WhatsApp</p>
+        </div>
+        <div class="booking-step">FormaCar · Бишкек</div>
+      </div>
+      <div class="booking-body" id="bookingBody">
+        <div class="form-grid">
+          <div class="form-field">
+            <label>Ваше имя</label>
+            <input type="text" id="fName" placeholder="Введите имя">
+          </div>
+          <div class="form-field">
+            <label>WhatsApp / Телефон</label>
+            <input type="tel" id="fPhone" placeholder="+996 700 000 000">
+          </div>
+          <div class="form-field">
+            <label>Марка и модель</label>
+            <input type="text" id="fCar" placeholder="BMW 5, Toyota Camry...">
+          </div>
+          <div class="form-field">
+            <label>Услуга</label>
+            <select id="fService" onchange="calcSum()">
+              <option value="">— Выберите —</option>
+              <option value="Экспресс-мойка">Экспресс-мойка</option>
+              <option value="Комплексная мойка">Комплексная мойка</option>
+              <option value="Детейлинг">Детейлинг</option>
+            </select>
+          </div>
+          <div class="form-field">
+            <label>Дата</label>
+            <input type="date" id="fDate">
+          </div>
+          <div class="form-field">
+            <label>Выберите время</label>
+            <div class="time-grid">
+              <div class="time-btn taken">9:00</div>
+              <div class="time-btn" onclick="pickTime(this,'10:00')">10:00</div>
+              <div class="time-btn" onclick="pickTime(this,'11:00')">11:00</div>
+              <div class="time-btn taken">12:00</div>
+              <div class="time-btn" onclick="pickTime(this,'13:00')">13:00</div>
+              <div class="time-btn" onclick="pickTime(this,'14:00')">14:00</div>
+              <div class="time-btn taken">15:00</div>
+              <div class="time-btn" onclick="pickTime(this,'16:00')">16:00</div>
+              <div class="time-btn" onclick="pickTime(this,'17:00')">17:00</div>
+              <div class="time-btn" onclick="pickTime(this,'18:00')">18:00</div>
+            </div>
+          </div>
+          <div class="form-field full">
+            <label>Комментарий (необязательно)</label>
+            <input type="text" id="fNote" placeholder="Особые пожелания, тип кузова...">
+          </div>
+        </div>
+
+        <div class="booking-summary" id="bookSum">
+          <div class="sum-row"><span>Услуга</span><span id="sumSvc">—</span></div>
+          <div class="sum-row total"><span>Итого</span><span id="sumTotal">Уточняется</span></div>
+        </div>
+
+        <button class="btn-submit" onclick="submitBook()">ПОДТВЕРДИТЬ ЗАПИСЬ →</button>
+
+        <div class="success-panel" id="successBox">
+          <div class="check">✓</div>
+          <h3>ЗАПИСЬ ПРИНЯТА</h3>
+          <p>Мы свяжемся с вами через WhatsApp для подтверждения. Ждём вас в FormaCar!</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- WHY -->
+  <section id="why" class="section services-bg">
+    <div class="section-label">Почему FormaCar</div>
+    <div class="section-title">НАШ <span class="accent">СТАНДАРТ</span></div>
+    <div class="why-grid">
+      <div class="why-item">
+        <div class="why-icon">🔬</div>
+        <div class="why-title">Профессиональная химия</div>
+        <div class="why-desc">Используем только сертифицированную автохимию. Безопасно для лакокрасочного покрытия и пластика.</div>
+      </div>
+      <div class="why-item">
+        <div class="why-icon">⏱</div>
+        <div class="why-title">Запись без ожидания</div>
+        <div class="why-desc">Выберите точное время онлайн — мы гарантируем, что мастер будет готов именно к вашему приезду.</div>
+      </div>
+      <div class="why-item">
+        <div class="why-icon">🛡</div>
+        <div class="why-title">Гарантия качества</div>
+        <div class="why-desc">Если результат вас не устроит — исправим бесплатно. Мы отвечаем за каждый автомобиль.</div>
+      </div>
+      <div class="why-item">
+        <div class="why-icon">👨‍🔧</div>
+        <div class="why-title">Опытная команда</div>
+        <div class="why-desc">Каждый мастер прошёл обучение и сертификацию. За 3 года — более 1200 довольных клиентов.</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer id="contact">
+    <div class="footer-top">
+      <div>
+        <span class="footer-logo"><span class="forma">Forma</span>Car</span>
+        <div class="footer-desc">Premium Car Wash в Бишкеке. Профессиональный уход за вашим автомобилем. Запись онлайн — без очередей.</div>
+      </div>
+      <div class="footer-col">
+        <div class="footer-col-title">Услуги</div>
+        <ul>
+          <li><a href="#">Экспресс-мойка</a></li>
+          <li><a href="#">Комплексная мойка</a></li>
+          <li><a href="#">Детейлинг</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <div class="footer-col-title">Контакты</div>
+        <ul>
+          <li><a href="#">📍 Бишкек, Кыргызстан</a></li>
+          <li><a href="#">📞 +996 — — —</a></li>
+          <li><a href="#">💬 WhatsApp</a></li>
+          <li><a href="#">📷 Instagram</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>© 2025 <span class="footer-red">FormaCar</span> Premium Car Wash. Все права защищены.</p>
+      <p style="color:#222">Разработка — укажите ваш бренд</p>
+    </div>
+  </footer>
+
+</div><!-- end siteView -->
+
+<!-- ══ CRM ══ -->
+<div id="crmView" class="view">
+  <div class="crm-wrap">
+
+    <!-- Sidebar -->
+    <aside class="crm-sidebar">
+      <div class="crm-sidebar-logo">
+        <div style="font-family:'Bebas Neue',sans-serif;font-size:1.2rem;letter-spacing:0.1em"><span style="color:var(--red)">Forma</span>Car</div>
+        <div class="sub">CRM · Панель</div>
+      </div>
+      <div class="crm-group-label">Главное</div>
+      <button class="crm-btn active" onclick="showPanel('dash',this)"><span class="ico">📊</span>Дашборд</button>
+      <button class="crm-btn" onclick="showPanel('orders',this)"><span class="ico">📋</span>Заказы</button>
+      <button class="crm-btn" onclick="showPanel('cal',this)"><span class="ico">📅</span>Расписание</button>
+      <button class="crm-btn" onclick="showPanel('clients',this)"><span class="ico">👥</span>Клиенты</button>
+      <div style="height:1px;background:var(--border);margin:1rem 0"></div>
+      <div class="crm-group-label">Настройки</div>
+      <button class="crm-btn" onclick="showPanel('staff',this)"><span class="ico">🔧</span>Персонал</button>
+      <button class="crm-btn" onclick="showPanel('prices',this)"><span class="ico">💰</span>Прайс-лист</button>
+      <div style="height:1px;background:var(--border);margin:1rem 0"></div>
+      <button class="crm-btn" onclick="showSite()"><span class="ico">←</span>На сайт</button>
+    </aside>
+
+    <!-- Main -->
+    <main class="crm-main">
+
+      <!-- DASHBOARD -->
+      <div class="crm-panel on" id="p-dash">
+        <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:1.5rem">
+          <div>
+            <div style="font-family:'Bebas Neue',sans-serif;font-size:2rem;letter-spacing:0.06em">ДАШБОРД</div>
+            <div style="font-size:0.78rem;color:var(--gray)">Пятница, 27 марта 2025</div>
+          </div>
+          <button class="btn-primary" style="clip-path:none;font-family:'Rajdhani',sans-serif;font-size:0.75rem;padding:0.6rem 1.2rem" onclick="openModal()">+ Новый заказ</button>
+        </div>
+
+        <div class="kpi-row">
+          <div class="kpi"><div class="kpi-label">Заказов сегодня</div><div class="kpi-val">8</div><div class="kpi-delta">↑ +3 к вчера</div></div>
+          <div class="kpi"><div class="kpi-label">Выручка (сом)</div><div class="kpi-val">—</div><div class="kpi-delta">↑ После добавления цен</div></div>
+          <div class="kpi"><div class="kpi-label">В ожидании</div><div class="kpi-val">2</div><div class="kpi-delta" style="color:var(--red)">Нужно принять</div></div>
+          <div class="kpi"><div class="kpi-label">Клиентов всего</div><div class="kpi-val">1 247</div><div class="kpi-delta">↑ +12 за неделю</div></div>
+        </div>
+
+        <div class="chart-row">
+          <div class="crm-box">
+            <div class="crm-box-title">Заказы · эта неделя</div>
+            <div class="bars">
+              <div class="bar-col"><div class="bar-fill" style="height:45%"></div><div class="bar-lbl">Пн</div></div>
+              <div class="bar-col"><div class="bar-fill" style="height:70%"></div><div class="bar-lbl">Вт</div></div>
+              <div class="bar-col"><div class="bar-fill" style="height:55%"></div><div class="bar-lbl">Ср</div></div>
+              <div class="bar-col"><div class="bar-fill" style="height:85%"></div><div class="bar-lbl">Чт</div></div>
+              <div class="bar-col"><div class="bar-fill today" style="height:100%"></div><div class="bar-lbl" style="color:var(--red)">Пт</div></div>
+              <div class="bar-col"><div class="bar-fill" style="height:15%;opacity:0.3"></div><div class="bar-lbl">Сб</div></div>
+              <div class="bar-col"><div class="bar-fill" style="height:15%;opacity:0.3"></div><div class="bar-lbl">Вс</div></div>
+            </div>
+          </div>
+          <div class="crm-box">
+            <div class="crm-box-title">Персонал сейчас</div>
+            <div style="display:flex;flex-direction:column;gap:0.9rem">
+              <div style="display:flex;align-items:center;gap:0.8rem">
+                <div style="width:36px;height:36px;background:rgba(212,43,43,0.15);border:1px solid var(--border-red);display:flex;align-items:center;justify-content:center;font-family:'Rajdhani',sans-serif;font-size:0.75rem;font-weight:700;color:var(--red)">АБ</div>
+                <div><div style="font-size:0.85rem">Азиз Байсалов</div><div style="font-size:0.72rem;color:var(--gray)">Старший мастер</div></div>
+                <div style="margin-left:auto;font-family:'Rajdhani',sans-serif;font-size:0.65rem;font-weight:700;color:#4caf7d;letter-spacing:0.1em">● В РАБОТЕ</div>
+              </div>
+              <div style="display:flex;align-items:center;gap:0.8rem">
+                <div style="width:36px;height:36px;background:rgba(212,43,43,0.15);border:1px solid var(--border-red);display:flex;align-items:center;justify-content:center;font-family:'Rajdhani',sans-serif;font-size:0.75rem;font-weight:700;color:var(--red)">МК</div>
+                <div><div style="font-size:0.85rem">Мирлан Касымов</div><div style="font-size:0.72rem;color:var(--gray)">Мастер детейлинга</div></div>
+                <div style="margin-left:auto;font-family:'Rajdhani',sans-serif;font-size:0.65rem;font-weight:700;color:#4caf7d;letter-spacing:0.1em">● В РАБОТЕ</div>
+              </div>
+              <div style="display:flex;align-items:center;gap:0.8rem">
+                <div style="width:36px;height:36px;background:var(--card);border:1px solid var(--border);display:flex;align-items:center;justify-content:center;font-family:'Rajdhani',sans-serif;font-size:0.75rem;font-weight:700;color:var(--gray)">ЭД</div>
+                <div><div style="font-size:0.85rem">Эрлан Джумабеков</div><div style="font-size:0.72rem;color:var(--gray)">Мастер</div></div>
+                <div style="margin-left:auto;font-family:'Rajdhani',sans-serif;font-size:0.65rem;font-weight:700;color:var(--gray);letter-spacing:0.1em">● ПЕРЕРЫВ</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Quick orders -->
+        <div class="crm-table-wrap">
+          <div class="crm-table-header">
+            <div class="crm-table-title">Заказы сегодня</div>
+          </div>
+          <table>
+            <thead><tr><th>#</th><th>Клиент</th><th>Авто</th><th>Услуга</th><th>Время</th><th>Статус</th><th>Действия</th></tr></thead>
+            <tbody>
+              <tr><td class="td-num">#1042</td><td>Асель Турганова</td><td>Toyota Camry</td><td>Комплексная</td><td>10:00</td><td><span class="badge badge-wip">В работе</span></td><td><button class="act-btn ok">✓ Готово</button></td></tr>
+              <tr><td class="td-num">#1043</td><td>Бакыт Орозов</td><td>BMW X5</td><td>Детейлинг</td><td>10:00</td><td><span class="badge badge-wip">В работе</span></td><td><button class="act-btn ok">✓ Готово</button></td></tr>
+              <tr><td class="td-num">#1044</td><td>Данияр Сейтов</td><td>Mercedes C200</td><td>Экспресс</td><td>11:00</td><td><span class="badge badge-new">Новый</span></td><td><button class="act-btn ok">Принять</button><button class="act-btn">Отклонить</button></td></tr>
+              <tr><td class="td-num">#1045</td><td>Айгерим Токтосунова</td><td>Hyundai Tucson</td><td>Экспресс</td><td>13:00</td><td><span class="badge badge-new">Новый</span></td><td><button class="act-btn ok">Принять</button><button class="act-btn">Отклонить</button></td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- ORDERS -->
+      <div class="crm-panel" id="p-orders">
+        <div style="font-family:'Bebas Neue',sans-serif;font-size:2rem;letter-spacing:0.06em;margin-bottom:1.5rem">ВСЕ ЗАКАЗЫ</div>
+        <div class="crm-table-wrap">
+          <div class="crm-table-header">
+            <div class="crm-table-title">Список · 8 заказов</div>
+            <div class="filters">
+              <button class="f-btn on">Все</button>
+              <button class="f-btn">Новые</button>
+              <button class="f-btn">В работе</button>
+              <button class="f-btn">Готово</button>
+            </div>
+          </div>
+          <table>
+            <thead><tr><th>#</th><th>Клиент</th><th>Телефон</th><th>Авто</th><th>Услуга</th><th>Дата</th><th>Время</th><th>Статус</th><th>Сумма</th><th>Действие</th></tr></thead>
+            <tbody>
+              <tr><td class="td-num">#1042</td><td>Асель Турганова</td><td style="color:var(--gray)">+996 700 111 222</td><td>Toyota Camry</td><td>Комплексная</td><td>27.03</td><td>10:00</td><td><span class="badge badge-wip">В работе</span></td><td class="td-price">—</td><td><button class="act-btn ok">✓ Готово</button></td></tr>
+              <tr><td class="td-num">#1043</td><td>Бакыт Орозов</td><td style="color:var(--gray)">+996 550 333 444</td><td>BMW X5</td><td>Детейлинг</td><td>27.03</td><td>10:00</td><td><span class="badge badge-wip">В работе</span></td><td class="td-price">—</td><td><button class="act-btn ok">✓ Готово</button></td></tr>
+              <tr><td class="td-num">#1044</td><td>Данияр Сейтов</td><td style="color:var(--gray)">+996 777 888 999</td><td>Mercedes C200</td><td>Экспресс</td><td>27.03</td><td>11:00</td><td><span class="badge badge-new">Новый</span></td><td class="td-price">—</td><td><button class="act-btn ok">Принять</button></td></tr>
+              <tr><td class="td-num">#1041</td><td>Нурия Жакыпова</td><td style="color:var(--gray)">+996 700 555 666</td><td>Lexus RX350</td><td>Комплексная</td><td>27.03</td><td>9:00</td><td><span class="badge badge-done">Готово</span></td><td class="td-price">—</td><td><button class="act-btn">Отзыв</button></td></tr>
+              <tr><td class="td-num">#1045</td><td>Айгерим Токтосунова</td><td style="color:var(--gray)">+996 550 000 111</td><td>Hyundai Tucson</td><td>Экспресс</td><td>27.03</td><td>13:00</td><td><span class="badge badge-new">Новый</span></td><td class="td-price">—</td><td><button class="act-btn ok">Принять</button></td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- CALENDAR -->
+      <div class="crm-panel" id="p-cal">
+        <div style="font-family:'Bebas Neue',sans-serif;font-size:2rem;letter-spacing:0.06em;margin-bottom:1.5rem">РАСПИСАНИЕ</div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:1px;background:var(--border)">
+          <div class="crm-box">
+            <div class="crm-box-title">Март 2025</div>
+            <div class="cal-grid">
+              <div class="cal-hdr">Пн</div><div class="cal-hdr">Вт</div><div class="cal-hdr">Ср</div><div class="cal-hdr">Чт</div><div class="cal-hdr">Пт</div><div class="cal-hdr">Сб</div><div class="cal-hdr">Вс</div>
+              <div class="cal-d empty"></div><div class="cal-d empty"></div><div class="cal-d empty"></div><div class="cal-d empty"></div><div class="cal-d empty"></div><div class="cal-d">1</div><div class="cal-d">2</div>
+              <div class="cal-d has">3</div><div class="cal-d has">4</div><div class="cal-d has">5</div><div class="cal-d has">6</div><div class="cal-d has">7</div><div class="cal-d">8</div><div class="cal-d">9</div>
+              <div class="cal-d has">10</div><div class="cal-d has">11</div><div class="cal-d has">12</div><div class="cal-d has">13</div><div class="cal-d has">14</div><div class="cal-d">15</div><div class="cal-d">16</div>
+              <div class="cal-d has">17</div><div class="cal-d has">18</div><div class="cal-d has">19</div><div class="cal-d has">20</div><div class="cal-d has">21</div><div class="cal-d">22</div><div class="cal-d">23</div>
+              <div class="cal-d has">24</div><div class="cal-d has">25</div><div class="cal-d has">26</div><div class="cal-d sel today">27</div><div class="cal-d">28</div><div class="cal-d">29</div><div class="cal-d">30</div>
+              <div class="cal-d">31</div>
+            </div>
+          </div>
+          <div class="crm-box">
+            <div class="crm-box-title">Слоты · 27 марта</div>
+            <div style="display:flex;flex-direction:column;gap:0.5rem">
+              <div style="display:flex;align-items:center;gap:1rem;padding:0.8rem;background:rgba(76,175,125,0.06);border-left:2px solid #4caf7d">
+                <span style="font-family:'Bebas Neue',sans-serif;font-size:1.1rem;color:#4caf7d;width:50px;flex-shrink:0">9:00</span>
+                <div><div style="font-size:0.83rem">Нурия Ж. — Lexus RX350</div><div style="font-size:0.72rem;color:var(--gray)">Комплексная</div></div>
+                <span class="badge badge-done" style="margin-left:auto">Готово</span>
+              </div>
+              <div style="display:flex;align-items:center;gap:1rem;padding:0.8rem;background:rgba(66,133,244,0.06);border-left:2px solid #64b5f6">
+                <span style="font-family:'Bebas Neue',sans-serif;font-size:1.1rem;color:#64b5f6;width:50px;flex-shrink:0">10:00</span>
+                <div><div style="font-size:0.83rem">Асель Т. — Toyota Camry</div><div style="font-size:0.72rem;color:var(--gray)">Комплексная</div></div>
+                <span class="badge badge-wip" style="margin-left:auto">В работе</span>
+              </div>
+              <div style="display:flex;align-items:center;gap:1rem;padding:0.8rem;background:rgba(212,43,43,0.06);border-left:2px solid var(--red)">
+                <span style="font-family:'Bebas Neue',sans-serif;font-size:1.1rem;color:var(--red);width:50px;flex-shrink:0">11:00</span>
+                <div><div style="font-size:0.83rem">Данияр С. — Mercedes C200</div><div style="font-size:0.72rem;color:var(--gray)">Экспресс</div></div>
+                <span class="badge badge-new" style="margin-left:auto">Новый</span>
+              </div>
+              <div style="display:flex;align-items:center;gap:1rem;padding:0.8rem;border:1px dashed var(--border);opacity:0.35">
+                <span style="font-family:'Bebas Neue',sans-serif;font-size:1.1rem;color:var(--gray);width:50px;flex-shrink:0">12:00</span>
+                <div style="font-size:0.83rem;color:var(--gray)">Свободно</div>
+              </div>
+              <div style="display:flex;align-items:center;gap:1rem;padding:0.8rem;background:rgba(212,43,43,0.06);border-left:2px solid var(--red)">
+                <span style="font-family:'Bebas Neue',sans-serif;font-size:1.1rem;color:var(--red);width:50px;flex-shrink:0">13:00</span>
+                <div><div style="font-size:0.83rem">Айгерим Т. — Hyundai Tucson</div><div style="font-size:0.72rem;color:var(--gray)">Экспресс</div></div>
+                <span class="badge badge-new" style="margin-left:auto">Новый</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- CLIENTS -->
+      <div class="crm-panel" id="p-clients">
+        <div style="font-family:'Bebas Neue',sans-serif;font-size:2rem;letter-spacing:0.06em;margin-bottom:1.5rem">КЛИЕНТЫ</div>
+        <div class="crm-table-wrap">
+          <div class="crm-table-header"><div class="crm-table-title">База клиентов</div></div>
+          <table>
+            <thead><tr><th>Клиент</th><th>Телефон</th><th>Автомобиль</th><th>Визитов</th><th>Последний визит</th></tr></thead>
+            <tbody class="client-row">
+              <tr><td>Асель Турганова</td><td style="color:var(--gray)">+996 700 111 222</td><td>Toyota Camry 2022</td><td>12</td><td>Сегодня</td></tr>
+              <tr><td>Бакыт Орозов</td><td style="color:var(--gray)">+996 550 333 444</td><td>BMW X5 2021</td><td>5</td><td>Сегодня</td></tr>
+              <tr><td>Нурия Жакыпова</td><td style="color:var(--gray)">+996 700 555 666</td><td>Lexus RX350</td><td>8</td><td>Сегодня</td></tr>
+              <tr><td>Данияр Сейтов</td><td style="color:var(--gray)">+996 777 888 999</td><td>Mercedes C200</td><td>3</td><td>26 марта</td></tr>
+              <tr><td>Айгерим Токтосунова</td><td style="color:var(--gray)">+996 550 000 111</td><td>Hyundai Tucson</td><td>7</td><td>25 марта</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- STAFF -->
+      <div class="crm-panel" id="p-staff">
+        <div style="font-family:'Bebas Neue',sans-serif;font-size:2rem;letter-spacing:0.06em;margin-bottom:1.5rem">ПЕРСОНАЛ</div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:1px;background:var(--border)">
+          <div class="crm-box">
+            <div class="crm-box-title">Сотрудники</div>
+            <div style="display:flex;flex-direction:column;gap:1.2rem">
+              <div style="display:flex;gap:1rem;align-items:flex-start">
+                <div style="width:44px;height:44px;background:rgba(212,43,43,0.15);border:1px solid var(--border-red);display:flex;align-items:center;justify-content:center;font-family:'Rajdhani',sans-serif;font-size:0.8rem;font-weight:700;color:var(--red);flex-shrink:0">АБ</div>
+                <div><div style="font-size:0.88rem;margin-bottom:0.2rem">Азиз Байсалов</div><div style="font-size:0.75rem;color:var(--gray)">Старший мастер · 3 года</div><div style="font-size:0.7rem;color:#4caf7d;font-family:'Rajdhani',sans-serif;font-weight:700;letter-spacing:0.1em;margin-top:0.3rem">● В РАБОТЕ</div></div>
+              </div>
+              <div style="display:flex;gap:1rem;align-items:flex-start">
+                <div style="width:44px;height:44px;background:rgba(212,43,43,0.15);border:1px solid var(--border-red);display:flex;align-items:center;justify-content:center;font-family:'Rajdhani',sans-serif;font-size:0.8rem;font-weight:700;color:var(--red);flex-shrink:0">МК</div>
+                <div><div style="font-size:0.88rem;margin-bottom:0.2rem">Мирлан Касымов</div><div style="font-size:0.75rem;color:var(--gray)">Мастер детейлинга · 2 года</div><div style="font-size:0.7rem;color:#4caf7d;font-family:'Rajdhani',sans-serif;font-weight:700;letter-spacing:0.1em;margin-top:0.3rem">● В РАБОТЕ</div></div>
+              </div>
+              <div style="display:flex;gap:1rem;align-items:flex-start">
+                <div style="width:44px;height:44px;background:var(--card);border:1px solid var(--border);display:flex;align-items:center;justify-content:center;font-family:'Rajdhani',sans-serif;font-size:0.8rem;font-weight:700;color:var(--gray);flex-shrink:0">ЭД</div>
+                <div><div style="font-size:0.88rem;margin-bottom:0.2rem">Эрлан Джумабеков</div><div style="font-size:0.75rem;color:var(--gray)">Мастер</div><div style="font-size:0.7rem;color:var(--gray);font-family:'Rajdhani',sans-serif;font-weight:700;letter-spacing:0.1em;margin-top:0.3rem">● ПЕРЕРЫВ</div></div>
+              </div>
+            </div>
+          </div>
+          <div class="crm-box">
+            <div class="crm-box-title">Статистика · март</div>
+            <div style="display:flex;flex-direction:column;gap:0.8rem">
+              <div style="display:flex;justify-content:space-between;align-items:center;padding:0.8rem 0;border-bottom:1px solid var(--border)"><span style="font-size:0.85rem">Азиз Байсалов</span><span style="font-family:'Bebas Neue',sans-serif;font-size:1.2rem;color:var(--red)">42 заказа</span></div>
+              <div style="display:flex;justify-content:space-between;align-items:center;padding:0.8rem 0;border-bottom:1px solid var(--border)"><span style="font-size:0.85rem">Мирлан Касымов</span><span style="font-family:'Bebas Neue',sans-serif;font-size:1.2rem;color:var(--red)">28 заказов</span></div>
+              <div style="display:flex;justify-content:space-between;align-items:center;padding:0.8rem 0"><span style="font-size:0.85rem">Эрлан Джумабеков</span><span style="font-family:'Bebas Neue',sans-serif;font-size:1.2rem;color:var(--red)">19 заказов</span></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- PRICES -->
+      <div class="crm-panel" id="p-prices">
+        <div style="font-family:'Bebas Neue',sans-serif;font-size:2rem;letter-spacing:0.06em;margin-bottom:1.5rem">ПРАЙС-ЛИСТ</div>
+        <div class="crm-box" style="border:1px solid var(--border)">
+          <div class="crm-box-title">Текущие услуги и цены</div>
+          <table>
+            <thead><tr><th>Услуга</th><th>Длительность</th><th>Цена (сом)</th><th>Статус</th></tr></thead>
+            <tbody>
+              <tr><td>Экспресс-мойка</td><td>30–40 мин</td><td style="color:var(--gray);font-style:italic">Не указана</td><td><span class="badge badge-new">Добавить</span></td></tr>
+              <tr><td>Комплексная мойка</td><td>1.5–2 ч</td><td style="color:var(--gray);font-style:italic">Не указана</td><td><span class="badge badge-new">Добавить</span></td></tr>
+              <tr><td>Детейлинг</td><td>4–6 ч</td><td style="color:var(--gray);font-style:italic">Не указана</td><td><span class="badge badge-new">Добавить</span></td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+    </main>
+  </div>
+</div>
+
+<!-- Modal -->
+<div class="modal-bg" id="modal">
+  <div class="modal-box">
+    <button class="modal-x" onclick="closeModal()">×</button>
+    <div class="modal-title">НОВЫЙ ЗАКАЗ</div>
+    <div class="modal-sub">Ручное добавление записи</div>
+    <div class="mform">
+      <input type="text" placeholder="Имя клиента">
+      <input type="tel" placeholder="Телефон">
+      <input type="text" placeholder="Марка и модель авто">
+      <select><option>Экспресс-мойка</option><option>Комплексная мойка</option><option>Детейлинг</option></select>
+      <input type="datetime-local">
+      <button class="btn-primary" style="clip-path:none;font-family:'Rajdhani',sans-serif;font-size:0.82rem;font-weight:700;letter-spacing:0.15em;" onclick="closeModal();alert('Заказ создан!')">СОЗДАТЬ ЗАКАЗ</button>
+    </div>
+  </div>
+</div>
+
+<script>
+let selTime = '';
+
+// View switching
+function showCRM() {
+  document.getElementById('siteView').classList.remove('active');
+  document.getElementById('crmView').classList.add('active');
+  window.scrollTo(0,0);
+}
+function showSite() {
+  document.getElementById('crmView').classList.remove('active');
+  document.getElementById('siteView').classList.add('active');
+  window.scrollTo(0,0);
+}
+
+// CRM panels
+function showPanel(id, btn) {
+  document.querySelectorAll('.crm-panel').forEach(p => p.classList.remove('on'));
+  document.getElementById('p-'+id).classList.add('on');
+  document.querySelectorAll('.crm-btn').forEach(b => b.classList.remove('active'));
+  if(btn) btn.classList.add('active');
+}
+
+// Booking
+function goBook() {
+  document.getElementById('booking').scrollIntoView({behavior:'smooth'});
+}
+function pickService(name) {
+  const s = document.getElementById('fService');
+  for(let o of s.options) { if(o.value === name) { o.selected=true; break; } }
+  calcSum();
+  goBook();
+}
+function pickTime(el, t) {
+  document.querySelectorAll('.time-btn:not(.taken)').forEach(b => b.classList.remove('selected'));
+  el.classList.add('selected');
+  selTime = t;
+}
+function calcSum() {
+  const svc = document.getElementById('fService').value;
+  if(svc) {
+    document.getElementById('sumSvc').textContent = svc;
+    document.getElementById('sumTotal').textContent = 'Уточняется у администратора';
+    document.getElementById('bookSum').classList.add('visible');
+  }
+}
+function submitBook() {
+  const n = document.getElementById('fName').value;
+  const p = document.getElementById('fPhone').value;
+  const c = document.getElementById('fCar').value;
+  const s = document.getElementById('fService').value;
+  if(!n || !p || !c || !s || !selTime) { alert('Заполните все поля и выберите время'); return; }
+  document.getElementById('successBox').classList.add('visible');
+  document.getElementById('successBox').scrollIntoView({behavior:'smooth'});
+}
+
+// Modal
+function openModal() { document.getElementById('modal').classList.add('open'); }
+function closeModal() { document.getElementById('modal').classList.remove('open'); }
+document.getElementById('modal').addEventListener('click', e => { if(e.target===document.getElementById('modal')) closeModal(); });
+
+// Filters
+document.querySelectorAll('.f-btn').forEach(btn => {
+  btn.addEventListener('click', function() {
+    this.closest('.filters').querySelectorAll('.f-btn').forEach(b => b.classList.remove('on'));
+    this.classList.add('on');
+  });
+});
+
+// Set date
+document.getElementById('fDate').value = new Date().toISOString().split('T')[0];
+document.getElementById('fDate').min = new Date().toISOString().split('T')[0];
+</script>
+</body>
+</html>
