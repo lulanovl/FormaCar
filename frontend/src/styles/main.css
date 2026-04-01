@@ -147,6 +147,8 @@ nav ul a:hover { color:var(--red); }
 .time-btn:hover { border-color:var(--red); color:var(--red); }
 .time-btn.taken { opacity:0.25; cursor:not-allowed; color:var(--gray); text-decoration:line-through; pointer-events:none; }
 .time-btn.selected { background:var(--red); border-color:var(--red); color:var(--white); box-shadow:0 0 16px var(--red-glow); }
+.time-btn { flex-direction:column; display:flex; align-items:center; justify-content:center; gap:0.15rem; }
+.time-btn-sub { font-size:0.6rem; font-weight:400; letter-spacing:0.05em; color:inherit; opacity:0.75; }
 
 /* Booking summary */
 .booking-summary { margin-top:1.5rem; padding:1.2rem 1.5rem; background:#0c0c0c; border:1px solid var(--border-red); display:none; }
@@ -206,6 +208,8 @@ footer { background:var(--dark); border-top:1px solid var(--border); padding:3re
 .crm-btn:hover { background:rgba(212,43,43,0.06); color:var(--silver); }
 .crm-btn.active { background:rgba(212,43,43,0.1); color:var(--red); border-left-color:var(--red); }
 .crm-btn .ico { font-size:0.9rem; width:18px; text-align:center; flex-shrink:0; }
+.crm-btn-add { background:rgba(212,43,43,0.12) !important; color:var(--red) !important; border:1px solid rgba(212,43,43,0.3); margin:0.75rem 1rem 0.25rem; width:calc(100% - 2rem) !important; border-radius:2px; font-weight:700 !important; font-size:0.9rem !important; justify-content:center; letter-spacing:0.15em; }
+.crm-btn-add:hover { background:rgba(212,43,43,0.22) !important; color:var(--white) !important; }
 .crm-main { padding:2rem; overflow-y:auto; }
 
 /* KPI */
@@ -296,6 +300,15 @@ tr:hover td { background:rgba(212,43,43,0.03); }
 .slot-item.confirmed { border-left-color:#64b5f6; background:rgba(66,133,244,0.04); }
 .slot-item.free  { border:1px dashed var(--border); opacity:0.35; }
 .slot-time { font-family:'Bebas Neue',sans-serif; font-size:1.1rem; width:50px; flex-shrink:0; }
+/* Multi-order slot (6 bays) */
+.slot-item-multi { display:flex; flex-direction:column; gap:0.5rem; padding:0.8rem; border-left:2px solid var(--border); }
+.slot-item-multi.full { border-left-color:var(--red); background:rgba(212,43,43,0.05); }
+.slot-item-header { display:flex; align-items:center; justify-content:space-between; }
+.slot-capacity { font-family:'Rajdhani',sans-serif; font-size:0.75rem; font-weight:600; letter-spacing:0.08em; }
+.slot-order-card { background:rgba(255,255,255,0.03); border:1px solid var(--border); padding:0.4rem 0.6rem; border-radius:2px; }
+.slot-order-row { display:flex; align-items:center; justify-content:space-between; gap:0.5rem; margin-bottom:0.15rem; }
+.slot-order-name { font-size:0.83rem; font-weight:500; }
+.slot-order-detail { font-size:0.72rem; color:var(--gray); }
 
 /* CRM Panels */
 .crm-panel { display:none; }

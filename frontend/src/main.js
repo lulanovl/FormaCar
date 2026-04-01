@@ -1,7 +1,7 @@
 import './styles/main.css';
 import { saveToken, getToken, clearToken, isAuthenticated } from './utils/auth.js';
 import { login } from './api/index.js';
-import { toastError, toastSuccess } from './components/toast.js';
+import { toastError, toastSuccess, toastInfo } from './components/toast.js';
 
 import { renderServicesSection } from './pages/site/services-section.js';
 import { renderBookingForm, scrollToBooking } from './pages/site/booking-form.js';
@@ -32,6 +32,9 @@ document.addEventListener('DOMContentLoaded', () => {
   renderServicesSection((svc) => scrollToBooking(svc));
   renderBookingForm();
 
+  // New order button in CRM sidebar
+  document.getElementById('btn-new-order')?.addEventListener('click', openNewOrderModal);
+
   // Global events from CRM panels
   window.addEventListener('crm:new-order', openNewOrderModal);
   window.addEventListener('crm:open-checklist', (e) => openChecklist(e.detail.orderId));
@@ -40,6 +43,7 @@ document.addEventListener('DOMContentLoaded', () => {
     if (currentView === 'crm') loadPanel(currentPanel);
   });
   window.addEventListener('auth:expired', () => {
+    if (_sseSource) { _sseSource.close(); _sseSource = null; }
     showSite();
     toastError('Сессия истекла, войдите снова');
   });
@@ -81,6 +85,39 @@ function showCRM() {
   document.getElementById('checklistView').style.display = 'none';
   window.scrollTo(0, 0);
   loadPanel(currentPanel);
+  connectSSE();
+}
+
+// ─── SSE — real-time admin notifications ──────────────────────────────────────
+let _sseSource = null;
+
+function connectSSE() {
+  if (_sseSource) return; // already connected
+  const token = getToken();
+  if (!token) return;
+
+  _sseSource = new EventSource(`/api/events?token=${encodeURIComponent(token)}`);
+
+  _sseSource.addEventListener('new_order', (e) => {
+    const data = JSON.parse(e.data);
+    toastInfo(`Новая заявка ${data.order_number} — ${data.client_name}`);
+    // Refresh current panel so the new order appears immediately
+    panelLoaded.delete('dash');
+    panelLoaded.delete('orders');
+    if (currentView === 'crm') loadPanel(currentPanel);
+  });
+
+  _sseSource.addEventListener('order_updated', () => {
+    panelLoaded.delete('dash');
+    panelLoaded.delete('orders');
+    if (currentView === 'crm') loadPanel(currentPanel);
+  });
+
+  _sseSource.onerror = () => {
+    // Browser will auto-reconnect; reset reference so reconnect picks fresh token
+    _sseSource.close();
+    _sseSource = null;
+  };
 }
 
 // ─── Login ────────────────────────────────────────────────────────────────────

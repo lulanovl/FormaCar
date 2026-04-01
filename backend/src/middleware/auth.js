@@ -7,11 +7,16 @@ const jwt = require('jsonwebtoken');
 function auth(req, res, next) {
   const authHeader = req.headers['authorization'];
 
-  if (!authHeader || !authHeader.startsWith('Bearer ')) {
-    return res.status(401).json({ error: 'Токен не предоставлен' });
+  // EventSource (SSE) cannot send headers — accept token as query param too
+  let token = req.query.token || null;
+
+  if (authHeader && authHeader.startsWith('Bearer ')) {
+    token = authHeader.slice(7);
   }
 
-  const token = authHeader.slice(7); // Remove "Bearer " prefix
+  if (!token) {
+    return res.status(401).json({ error: 'Токен не предоставлен' });
+  }
 
   try {
     const decoded = jwt.verify(token, process.env.JWT_SECRET || 'formacar_secret_change_in_production');

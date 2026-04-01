@@ -197,8 +197,12 @@ async function loadSlots(date) {
     state.slots = await getSlots(date);
     state.selectedTime = null;
     grid.innerHTML = state.slots.map(slot => {
-      const taken = !slot.available;
-      return `<div class="time-btn ${taken ? 'taken' : ''}" data-time="${slot.time}">${slot.time}</div>`;
+      if (!slot.available) {
+        return `<div class="time-btn taken" data-time="${slot.time}">${slot.time}<span class="time-btn-sub">занято</span></div>`;
+      }
+      const spotsLeft = slot.spots_left ?? 6;
+      const sub = spotsLeft <= 3 ? `<span class="time-btn-sub" style="color:#f59e0b">${spotsLeft} место</span>` : '';
+      return `<div class="time-btn" data-time="${slot.time}">${slot.time}${sub}</div>`;
     }).join('');
     grid.querySelectorAll('.time-btn:not(.taken)').forEach(btn => {
       btn.addEventListener('click', () => {
