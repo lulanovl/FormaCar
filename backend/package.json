@@ -9,7 +9,7 @@
     "migrate": "knex migrate:latest --knexfile knexfile.js",
     "migrate:rollback": "knex migrate:rollback --knexfile knexfile.js",
     "seed": "knex seed:run --knexfile knexfile.js",
-    "setup": "npm run migrate && npm run seed"
+    "setup": "node -e \"require('fs').mkdirSync('data',{recursive:true})\" && npm run migrate && npm run seed"
   },
   "dependencies": {
     "cors": "^2.8.5",
