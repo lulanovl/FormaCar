@@ -42,13 +42,15 @@ app.use(express.json());
 // Mount all routes under /api
 app.use('/api', routes);
 
-// Serve frontend static build in production
-if (process.env.NODE_ENV === 'production') {
-  const frontendDist = path.join(__dirname, '../../frontend/dist');
+// Serve frontend static build if it exists
+const frontendDist = path.join(__dirname, '../../frontend/dist');
+if (fs.existsSync(frontendDist)) {
   app.use(express.static(frontendDist));
   app.get('*', (req, res) => {
     res.sendFile(path.join(frontendDist, 'index.html'));
   });
+} else {
+  console.warn('Frontend dist not found, skipping static asset serving:', frontendDist);
 }
 
 // Global error handler (must be last)
