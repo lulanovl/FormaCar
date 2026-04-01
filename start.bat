@@ -1,4 +1,4 @@
-@echo off
+пше @echo off
 title FormaCar — Dev Servers
 
 echo Starting FormaCar...

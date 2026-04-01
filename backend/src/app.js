@@ -42,6 +42,15 @@ app.use(express.json());
 // Mount all routes under /api
 app.use('/api', routes);
 
+// Serve frontend static build in production
+if (process.env.NODE_ENV === 'production') {
+  const frontendDist = path.join(__dirname, '../../frontend/dist');
+  app.use(express.static(frontendDist));
+  app.get('*', (req, res) => {
+    res.sendFile(path.join(frontendDist, 'index.html'));
+  });
+}
+
 // Global error handler (must be last)
 app.use(errorHandler);
 
