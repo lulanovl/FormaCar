@@ -78,7 +78,16 @@ export default function Clients({ isActive }) {
               {clients.map(c => (
                 <tr key={c.id}>
                   <td style={{ fontWeight: 500 }}>{c.name}</td>
-                  <td style={{ color: 'var(--gray)' }}>{c.phone}</td>
+                  <td>
+                    <a
+                      href={`https://wa.me/${c.phone.replace(/\D/g, '')}`}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      style={{ color: '#25d366', textDecoration: 'none', fontSize: '0.83rem' }}
+                    >
+                      {c.phone}
+                    </a>
+                  </td>
                   <td>{c.car || '—'}</td>
                   <td><span className="badge badge-done">{c.total_visits}</span></td>
                   <td>{formatDate(c.last_visit)}</td>

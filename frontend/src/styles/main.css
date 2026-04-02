@@ -128,7 +128,7 @@ nav ul a:hover { color:var(--red); }
 .service-card:hover { transform:translateY(-6px); box-shadow:0 20px 56px rgba(0,0,0,0.6), 0 0 40px rgba(230,0,0,0.08); border-color:rgba(230,0,0,0.25); }
 .service-card:hover::before { transform:scaleX(1); }
 .service-card:hover::after { opacity:1; }
-.service-num { font-family:'Bebas Neue',sans-serif; font-size:4rem; line-height:1; color:rgba(212,43,43,0.28); margin-bottom:1rem; display:block; letter-spacing:0.05em; }
+.service-num { font-family:'Bebas Neue',sans-serif; font-size:4rem; line-height:1; color:rgba(230,0,0,0.45); margin-bottom:1rem; display:block; letter-spacing:0.05em; }
 .service-name { font-family:'Rajdhani',sans-serif; font-size:1.4rem; font-weight:700; letter-spacing:0.1em; text-transform:uppercase; margin-bottom:0.8rem; color:var(--white); }
 .service-desc { font-size:0.85rem; line-height:1.7; color:var(--gray); margin-bottom:1.8rem; }
 .service-features { list-style:none; margin-bottom:2rem; }
@@ -208,6 +208,43 @@ nav ul a:hover { color:var(--red); }
 .success-panel h3 { font-family:'Bebas Neue',sans-serif; font-size:2rem; letter-spacing:0.1em; color:var(--red); margin-bottom:0.5rem; }
 .success-panel p { color:var(--gray); font-size:0.9rem; margin-bottom:0.3rem; }
 .success-panel .order-num { font-family:'Bebas Neue',sans-serif; font-size:1.4rem; color:var(--white); margin-top:0.5rem; }
+
+/* ─── SERVICE PICKER (booking form) ─── */
+.svc-pick-grid { display:grid; grid-template-columns:repeat(2,1fr); gap:0.5rem; }
+.svc-pick-btn { display:flex; flex-direction:column; align-items:flex-start; gap:0.25rem; padding:0.85rem 1rem; border:1px solid var(--border-light); background:rgba(0,0,0,0.35); color:var(--silver); cursor:pointer; text-align:left; transition:border-color 0.2s, background 0.2s, box-shadow 0.2s; border-radius:4px; }
+.svc-pick-btn:hover { border-color:var(--border-red); background:rgba(230,0,0,0.05); }
+.svc-pick-btn.selected { border-color:var(--red); background:rgba(230,0,0,0.1); box-shadow:0 0 0 1px rgba(230,0,0,0.3); }
+.svc-pick-name { font-family:'Rajdhani',sans-serif; font-size:0.9rem; font-weight:700; letter-spacing:0.05em; color:var(--white); }
+.svc-pick-btn.selected .svc-pick-name { color:var(--red); }
+.svc-pick-desc { font-size:0.75rem; color:var(--gray); line-height:1.4; }
+
+/* ─── ORDER CARDS (CRM) ─── */
+.order-cards { display:flex; flex-direction:column; }
+.order-card { border-bottom:1px solid var(--border); transition:background 0.2s; }
+.order-card:last-child { border-bottom:none; }
+.order-card.open { background:rgba(230,0,0,0.03); }
+
+.oc-row { display:flex; align-items:center; gap:0.75rem; padding:0.9rem 1.2rem; cursor:pointer; flex-wrap:wrap; transition:background 0.15s; }
+.oc-row:hover { background:rgba(255,255,255,0.02); }
+
+.oc-meta { display:flex; align-items:center; gap:0.5rem; flex-shrink:0; }
+.oc-main { display:flex; flex-direction:column; gap:0.1rem; flex:1; min-width:120px; }
+.oc-name { font-size:0.88rem; font-weight:600; color:var(--white); }
+.oc-car { font-size:0.75rem; color:var(--gray); }
+
+.oc-right { display:flex; align-items:center; gap:0.6rem; flex-shrink:0; flex-wrap:wrap; margin-left:auto; }
+.oc-wa { display:inline-flex; align-items:center; gap:0.35rem; font-size:0.8rem; color:#25d366; text-decoration:none; white-space:nowrap; transition:opacity 0.2s; }
+.oc-wa:hover { opacity:0.75; }
+.oc-wa-icon { width:14px; height:14px; flex-shrink:0; }
+.oc-actions { display:flex; gap:0.35rem; align-items:center; flex-wrap:wrap; }
+
+.oc-toggle { background:none; border:none; color:var(--gray); font-size:0.55rem; cursor:pointer; padding:0.3rem; flex-shrink:0; transition:color 0.2s; }
+.oc-toggle:hover { color:var(--red); }
+
+.oc-details { padding:0.5rem 1.2rem 1rem; border-top:1px solid var(--border); }
+.ocd-row { display:flex; justify-content:space-between; align-items:center; padding:0.4rem 0; font-size:0.82rem; border-bottom:1px solid rgba(26,26,26,0.8); }
+.ocd-row:last-child { border-bottom:none; }
+.ocd-row span:first-child { color:var(--gray); }
 
 /* ─── WHY ─── */
 .why-grid { display:grid; grid-template-columns:1fr 1fr; gap:12px; }
@@ -714,6 +751,7 @@ tr:hover td { background:rgba(212,43,43,0.03); }
   .section-label { font-size:0.65rem; }
 
   /* ── Service cards ── */
+  .services-grid { grid-template-columns:1fr; gap:8px; }
   .service-card { padding:1.5rem 1.2rem; }
   .service-num { font-size:3rem; }
   .service-icon { font-size:1.6rem; margin-bottom:0.6rem; }
@@ -726,6 +764,7 @@ tr:hover td { background:rgba(212,43,43,0.03); }
   .booking-header { padding:1.2rem 1rem; flex-direction:column; align-items:flex-start; gap:0.4rem; }
   .booking-header h3 { font-size:1.5rem; }
   .booking-body { padding:1.2rem 1rem; }
+  .svc-pick-grid { grid-template-columns:1fr; }
   .car-type-btn { font-size:0.75rem; padding:0.6rem 0.3rem; }
   .car-type-btn .ct-icon { font-size:1.2rem; }
   .time-grid { grid-template-columns:repeat(3,1fr); gap:0.4rem; }
@@ -739,8 +778,14 @@ tr:hover td { background:rgba(212,43,43,0.03); }
   .success-panel { padding:2rem 1rem; }
   .success-panel h3 { font-size:1.6rem; }
 
+  /* ── Order cards mobile ── */
+  .oc-row { gap:0.5rem; padding:0.75rem 0.8rem; }
+  .oc-right { width:100%; margin-left:0; justify-content:space-between; }
+  .oc-main { min-width:0; }
+
   /* ── Why ── */
-  .why-item { padding:1.5rem 1rem; }
+  .why-grid { gap:8px; }
+  .why-item { padding:1.5rem 1rem; border-radius:8px; }
   .why-title { font-size:0.92rem; }
 
   /* ── Footer ── */

@@ -20,8 +20,17 @@ export default function BookingForm({ preSelectService = null }) {
   const [slotsLoading, setSlotsLoading] = useState(true);
 
   const [name, setName] = useState('');
-  const [phone, setPhone] = useState('');
+  const [phone, setPhone] = useState('+996');
   const [car, setCar] = useState('');
+
+  function handlePhoneChange(e) {
+    let val = e.target.value;
+    if (!val.startsWith('+996')) {
+      const digits = val.replace(/\D/g, '');
+      val = '+996' + digits;
+    }
+    setPhone(val);
+  }
   const [note, setNote] = useState('');
 
   const [submitting, setSubmitting] = useState(false);
@@ -158,7 +167,7 @@ export default function BookingForm({ preSelectService = null }) {
             {/* Phone */}
             <div className="form-field">
               <label>WhatsApp / Телефон</label>
-              <input type="tel" placeholder="+996 700 000 000" value={phone} onChange={e => setPhone(e.target.value)} />
+              <input type="tel" placeholder="+996 700 000 000" value={phone} onChange={handlePhoneChange} />
             </div>
             {/* Car */}
             <div className="form-field">
@@ -166,15 +175,21 @@ export default function BookingForm({ preSelectService = null }) {
               <input type="text" placeholder="Toyota Camry, BMW X5..." value={car} onChange={e => setCar(e.target.value)} />
             </div>
             {/* Service */}
-            <div className="form-field">
+            <div className="form-field full">
               <label>Услуга</label>
-              <select value={selectedService?.id || ''} onChange={e => {
-                const id = Number(e.target.value);
-                setSelectedService(services.find(s => s.id === id) || null);
-              }}>
-                <option value="">— Выберите услугу —</option>
-                {services.map(s => <option key={s.id} value={s.id}>{s.name}</option>)}
-              </select>
+              <div className="svc-pick-grid">
+                {services.map(s => (
+                  <button
+                    key={s.id}
+                    type="button"
+                    className={`svc-pick-btn ${selectedService?.id === s.id ? 'selected' : ''}`}
+                    onClick={() => setSelectedService(s)}
+                  >
+                    <span className="svc-pick-name">{s.name}</span>
+                    {s.description && <span className="svc-pick-desc">{s.description}</span>}
+                  </button>
+                ))}
+              </div>
             </div>
             {/* Car type */}
             <div className="form-field full">
