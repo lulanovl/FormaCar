@@ -211,8 +211,7 @@ export default function BookingForm({ preSelectService = null }) {
                       className={`svc-drop-item ${selectedService?.id === s.id ? 'active' : ''}`}
                       onClick={() => { setSelectedService(s); setSvcDropOpen(false); }}
                     >
-                      <span className="svc-drop-item-name">{s.name}</span>
-                      {s.description && <span className="svc-drop-item-desc">{s.description}</span>}
+                      {s.name}
                     </button>
                   ))}
                 </div>

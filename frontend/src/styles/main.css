@@ -232,19 +232,14 @@ nav ul a:hover { color:var(--red); }
   overflow:hidden;
 }
 .svc-drop-item {
-  width:100%; display:flex; flex-direction:column; align-items:flex-start; gap:0.15rem;
-  padding:0.85rem 1rem; border:none; background:none; cursor:pointer; text-align:left;
-  border-bottom:1px solid var(--border); transition:background 0.15s;
+  width:100%; padding:0.7rem 1rem; border:none; background:none; cursor:pointer; text-align:left;
+  border-bottom:1px solid var(--border); transition:background 0.15s, color 0.15s;
+  font-family:'Rajdhani',sans-serif; font-size:0.9rem; font-weight:600;
+  letter-spacing:0.06em; text-transform:uppercase; color:var(--silver);
 }
 .svc-drop-item:last-child { border-bottom:none; }
-.svc-drop-item:hover { background:rgba(230,0,0,0.07); }
-.svc-drop-item.active { background:rgba(230,0,0,0.12); }
-.svc-drop-item-name {
-  font-family:'Rajdhani',sans-serif; font-size:0.92rem; font-weight:700;
-  letter-spacing:0.06em; color:var(--white); text-transform:uppercase;
-}
-.svc-drop-item.active .svc-drop-item-name { color:var(--red); }
-.svc-drop-item-desc { font-size:0.75rem; color:var(--gray); line-height:1.35; }
+.svc-drop-item:hover { background:rgba(230,0,0,0.07); color:var(--white); }
+.svc-drop-item.active { background:rgba(230,0,0,0.12); color:var(--red); }
 
 /* ─── ORDER CARDS (CRM) ─── */
 .orders-toolbar { display:flex; gap:0.8rem; align-items:center; flex-wrap:wrap; margin-bottom:0.75rem; }
