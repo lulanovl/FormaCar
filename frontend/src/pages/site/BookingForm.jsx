@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { getServices, getCarTypes, getAdditionalServices, getSlots, createOrder } from '../../api/index.js';
 import { todayISO } from '../../utils/format.js';
 import { toastError, toastSuccess } from '../../components/toast.js';
@@ -32,6 +32,19 @@ export default function BookingForm({ preSelectService = null }) {
     setPhone(val);
   }
   const [note, setNote] = useState('');
+
+  const [svcDropOpen, setSvcDropOpen] = useState(false);
+  const svcDropRef = useRef(null);
+
+  useEffect(() => {
+    function onMouseDown(e) {
+      if (svcDropRef.current && !svcDropRef.current.contains(e.target)) {
+        setSvcDropOpen(false);
+      }
+    }
+    document.addEventListener('mousedown', onMouseDown);
+    return () => document.removeEventListener('mousedown', onMouseDown);
+  }, []);
 
   const [submitting, setSubmitting] = useState(false);
   const [submitted, setSubmitted] = useState(false);
@@ -175,21 +188,35 @@ export default function BookingForm({ preSelectService = null }) {
               <input type="text" placeholder="Toyota Camry, BMW X5..." value={car} onChange={e => setCar(e.target.value)} />
             </div>
             {/* Service */}
-            <div className="form-field full">
+            <div className="form-field" ref={svcDropRef} style={{ position: 'relative' }}>
               <label>Услуга</label>
-              <div className="svc-pick-grid">
-                {services.map(s => (
-                  <button
-                    key={s.id}
-                    type="button"
-                    className={`svc-pick-btn ${selectedService?.id === s.id ? 'selected' : ''}`}
-                    onClick={() => setSelectedService(s)}
-                  >
-                    <span className="svc-pick-name">{s.name}</span>
-                    {s.description && <span className="svc-pick-desc">{s.description}</span>}
-                  </button>
-                ))}
-              </div>
+              <button
+                type="button"
+                className={`svc-drop-trigger ${svcDropOpen ? 'open' : ''}`}
+                onClick={() => setSvcDropOpen(o => !o)}
+              >
+                <span className={selectedService ? 'svc-drop-value' : 'svc-drop-placeholder'}>
+                  {selectedService ? selectedService.name : '— Выберите услугу —'}
+                </span>
+                <svg className="svc-drop-arrow" viewBox="0 0 10 6" fill="none">
+                  <path d="M1 1l4 4 4-4" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+                </svg>
+              </button>
+              {svcDropOpen && (
+                <div className="svc-drop-menu">
+                  {services.map(s => (
+                    <button
+                      key={s.id}
+                      type="button"
+                      className={`svc-drop-item ${selectedService?.id === s.id ? 'active' : ''}`}
+                      onClick={() => { setSelectedService(s); setSvcDropOpen(false); }}
+                    >
+                      <span className="svc-drop-item-name">{s.name}</span>
+                      {s.description && <span className="svc-drop-item-desc">{s.description}</span>}
+                    </button>
+                  ))}
+                </div>
+              )}
             </div>
             {/* Car type */}
             <div className="form-field full">

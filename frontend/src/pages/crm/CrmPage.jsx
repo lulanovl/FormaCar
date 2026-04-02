@@ -11,6 +11,13 @@ const PANEL_LABELS = { dash: 'Дашборд', orders: 'Заказы', cal: 'Р�
 export default function CrmPage({ panel, onPanelChange, refreshKey, onNewOrder, onOpenChecklist, onBackSite }) {
   const [loadedPanels, setLoadedPanels] = useState(new Set(['dash']));
   const [drawerOpen, setDrawerOpen] = useState(false);
+  const [ordersFilter, setOrdersFilter] = useState('all');
+
+  function handleNavigate(panelId, filter) {
+    if (filter) setOrdersFilter(filter);
+    onPanelChange(panelId);
+    setDrawerOpen(false);
+  }
 
   useEffect(() => {
     setLoadedPanels(prev => new Set([...prev, panel]));
@@ -120,6 +127,7 @@ export default function CrmPage({ panel, onPanelChange, refreshKey, onNewOrder, 
               refreshKey={refreshKey}
               onNewOrder={onNewOrder}
               onOpenChecklist={onOpenChecklist}
+              onNavigate={handleNavigate}
             />
           )}
         </div>
@@ -131,6 +139,7 @@ export default function CrmPage({ panel, onPanelChange, refreshKey, onNewOrder, 
               refreshKey={refreshKey}
               onNewOrder={onNewOrder}
               onOpenChecklist={onOpenChecklist}
+              initialFilter={ordersFilter}
             />
           )}
         </div>

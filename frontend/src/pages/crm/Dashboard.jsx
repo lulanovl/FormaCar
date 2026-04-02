@@ -3,7 +3,7 @@ import { getDashboard, updateStaff, updateOrderStatus } from '../../api/index.js
 import { formatDate, STATUS_LABEL, STATUS_BADGE, STAFF_STATUS_LABEL, STAFF_STATUS_COLOR } from '../../utils/format.js';
 import { toastSuccess, toastError } from '../../components/toast.js';
 
-export default function Dashboard({ isActive, refreshKey, onNewOrder, onOpenChecklist }) {
+export default function Dashboard({ isActive, refreshKey, onNewOrder, onOpenChecklist, onNavigate }) {
   const [data, setData] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -73,9 +73,10 @@ export default function Dashboard({ isActive, refreshKey, onNewOrder, onOpenChec
       </div>
 
       <div className="kpi-row">
-        <div className="kpi">
+        <div className="kpi kpi-link" onClick={() => onNavigate?.('orders', 'all')} title="Перейти к заказам">
           <div className="kpi-label">Заказов сегодня</div>
           <div className="kpi-val">{data.today_orders_count}</div>
+          <div className="kpi-delta">Смотреть все →</div>
         </div>
         <div className="kpi">
           <div className="kpi-label">Выручка сегодня</div>
@@ -83,14 +84,18 @@ export default function Dashboard({ isActive, refreshKey, onNewOrder, onOpenChec
             {data.today_revenue ? data.today_revenue.toLocaleString('ru-RU') + ' сом' : '—'}
           </div>
         </div>
-        <div className="kpi">
+        <div className="kpi kpi-link" onClick={() => onNavigate?.('orders', 'new')} title="Перейти к новым заказам">
           <div className="kpi-label">В ожидании</div>
           <div className="kpi-val">{data.pending_count}</div>
-          {data.pending_count > 0 && <div className="kpi-delta neg">Нужно принять</div>}
+          {data.pending_count > 0
+            ? <div className="kpi-delta neg">Принять →</div>
+            : <div className="kpi-delta">Смотреть →</div>
+          }
         </div>
-        <div className="kpi">
+        <div className="kpi kpi-link" onClick={() => onNavigate?.('clients')} title="Перейти к клиентам">
           <div className="kpi-label">Клиентов всего</div>
           <div className="kpi-val">{data.total_clients}</div>
+          <div className="kpi-delta">База клиентов →</div>
         </div>
       </div>
 
