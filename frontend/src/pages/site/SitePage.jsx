@@ -136,10 +136,49 @@ export default function SitePage({ onCrmClick }) {
         <div className="section-label">Почему FormaCar</div>
         <div className="section-title">НАШ <span className="accent">СТАНДАРТ</span></div>
         <div className="why-grid">
-          <div className="why-item"><div className="why-icon">🔬</div><div className="why-title">Профессиональная химия</div><div className="why-desc">Используем только сертифицированную автохимию. Безопасно для лакокрасочного покрытия и пластика.</div></div>
-          <div className="why-item"><div className="why-icon">⏱</div><div className="why-title">Запись без ожидания</div><div className="why-desc">Выберите точное время онлайн — мы гарантируем, что мастер будет готов именно к вашему приезду.</div></div>
-          <div className="why-item"><div className="why-icon">🛡</div><div className="why-title">Гарантия качества</div><div className="why-desc">Если результат вас не устроит — исправим бесплатно. Мы отвечаем за каждый автомобиль.</div></div>
-          <div className="why-item"><div className="why-icon">👨‍🔧</div><div className="why-title">Опытная команда</div><div className="why-desc">Каждый мастер прошёл обучение и сертификацию. За 3 года — более 1200 довольных клиентов.</div></div>
+          <div className="why-item">
+            <div className="why-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+                <path d="M9 3H6a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V5a2 2 0 0 0-2-2h-3"/>
+                <path d="M9 3a2 2 0 0 1 2-2h2a2 2 0 0 1 2 2v1H9V3z"/>
+                <path d="M9 12h6M9 16h4"/>
+              </svg>
+            </div>
+            <div className="why-title">Профессиональная химия</div>
+            <div className="why-desc">Используем только сертифицированную автохимию. Безопасно для лакокрасочного покрытия и пластика.</div>
+          </div>
+          <div className="why-item">
+            <div className="why-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+                <circle cx="12" cy="12" r="9"/>
+                <path d="M12 7v5l3.5 3.5"/>
+              </svg>
+            </div>
+            <div className="why-title">Запись без ожидания</div>
+            <div className="why-desc">Выберите точное время онлайн — мы гарантируем, что мастер будет готов именно к вашему приезду.</div>
+          </div>
+          <div className="why-item">
+            <div className="why-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+                <path d="M12 2L3 7v6c0 5.25 3.75 10.15 9 11.25C17.25 23.15 21 18.25 21 13V7L12 2z"/>
+                <path d="M8.5 12.5l2.5 2.5 4.5-4.5"/>
+              </svg>
+            </div>
+            <div className="why-title">Гарантия качества</div>
+            <div className="why-desc">Если результат вас не устроит — исправим бесплатно. Мы отвечаем за каждый автомобиль.</div>
+          </div>
+          <div className="why-item">
+            <div className="why-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+                <circle cx="9" cy="7" r="3"/>
+                <circle cx="16" cy="8" r="2.5"/>
+                <path d="M3 20c0-3.31 2.69-6 6-6s6 2.69 6 6"/>
+                <path d="M16 14c1.66 0 4 .83 4 2.5V20"/>
+              </svg>
+            </div>
+            <div className="why-title">Опытная команда</div>
+            <div className="why-desc">Каждый мастер прошёл обучение и сертификацию. За 3 года — более 1200 довольных клиентов.</div>
+          </div>
         </div>
       </section>
 

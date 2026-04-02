@@ -1,7 +1,6 @@
 import { useState, useEffect } from 'react';
 import { getServices } from '../../api/index.js';
 
-const SERVICE_ICONS = ['⚡', '✨', '💎', '🧹', '🛡️', '🔧', '🔩'];
 const SERVICE_FEATURES = {
   'Стандартная мойка':    ['Мойка кузова под давлением', 'Чистка дисков и арок', 'Сушка микрофиброй', 'Мойка стёкол'],
   'Трёхфазная мойка':     ['Предварительная пена-мойка', 'Основная мойка', 'Финальная полировка', 'Чистка дисков', 'Мойка стёкол'],
@@ -41,7 +40,6 @@ export default function ServicesSection({ onPick }) {
     <div id="services-grid">
       <div className="services-grid">
         {services.map((svc, i) => {
-          const icon = SERVICE_ICONS[i] || '🔧';
           const features = SERVICE_FEATURES[svc.name] || [];
           const isPopular = svc.name === 'Трёхфазная мойка';
 
@@ -58,7 +56,6 @@ export default function ServicesSection({ onPick }) {
                 </div>
               )}
               <span className="service-num">0{i + 1}</span>
-              <span className="service-icon">{icon}</span>
               <div className="service-name">{svc.name}</div>
               <div className="service-desc">{svc.description}</div>
               <ul className="service-features">

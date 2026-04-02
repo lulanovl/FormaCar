@@ -118,13 +118,12 @@ nav ul a:hover { color:var(--red); }
 .service-card:hover { background:#181818; }
 .service-card:hover::before { transform:scaleX(1); }
 .service-card:hover::after { opacity:1; }
-.service-num { font-family:'Bebas Neue',sans-serif; font-size:4rem; line-height:1; color:rgba(212,43,43,0.12); margin-bottom:0.5rem; display:block; letter-spacing:0.05em; }
-.service-icon { font-size:2rem; margin-bottom:1rem; display:block; }
+.service-num { font-family:'Bebas Neue',sans-serif; font-size:4rem; line-height:1; color:rgba(212,43,43,0.28); margin-bottom:1rem; display:block; letter-spacing:0.05em; }
 .service-name { font-family:'Rajdhani',sans-serif; font-size:1.4rem; font-weight:700; letter-spacing:0.1em; text-transform:uppercase; margin-bottom:0.8rem; color:var(--white); }
 .service-desc { font-size:0.85rem; line-height:1.7; color:var(--gray); margin-bottom:1.8rem; }
 .service-features { list-style:none; margin-bottom:2rem; }
-.service-features li { font-size:0.82rem; color:#555; padding:0.4rem 0; border-bottom:1px solid var(--border); display:flex; align-items:center; gap:0.6rem; transition:color 0.25s; }
-.service-card:hover .service-features li { color:#888; }
+.service-features li { font-size:0.82rem; color:#888; padding:0.4rem 0; border-bottom:1px solid var(--border); display:flex; align-items:center; gap:0.6rem; transition:color 0.25s; }
+.service-card:hover .service-features li { color:#aaa; }
 .service-features li::before { content:'▸'; color:var(--red); font-size:0.6rem; flex-shrink:0; }
 .service-footer { display:flex; align-items:flex-end; justify-content:space-between; gap:1rem; flex-wrap:wrap; }
 
@@ -204,7 +203,8 @@ nav ul a:hover { color:var(--red); }
 .why-grid { display:grid; grid-template-columns:1fr 1fr; gap:1px; background:var(--border); }
 .why-item { background:var(--dark); padding:2.5rem; border-left:3px solid transparent; transition:border-color 0.3s, background 0.3s; }
 .why-item:hover { border-left-color:var(--red); background:var(--card); }
-.why-icon { font-size:2rem; margin-bottom:1rem; }
+.why-icon { width:48px; height:48px; margin-bottom:1.2rem; color:var(--red); }
+.why-icon svg { width:100%; height:100%; }
 .why-title { font-family:'Rajdhani',sans-serif; font-size:1rem; font-weight:700; letter-spacing:0.15em; text-transform:uppercase; margin-bottom:0.5rem; color:var(--white); }
 .why-desc { font-size:0.85rem; color:var(--gray); line-height:1.65; }
 
