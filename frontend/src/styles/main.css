@@ -1,16 +1,18 @@
 /* ─── VARIABLES ─── */
 :root {
-  --red: #d42b2b;
-  --red-dark: #a01e1e;
-  --red-glow: rgba(212,43,43,0.35);
-  --black: #080808;
-  --dark: #0f0f0f;
-  --card: #141414;
-  --border: #1f1f1f;
-  --border-red: rgba(212,43,43,0.3);
+  --red: #e60000;
+  --red-dark: #bf0000;
+  --red-glow: rgba(230,0,0,0.4);
+  --black: #050505;
+  --dark: #0b0b0b;
+  --card: #111111;
+  --border: #1a1a1a;
+  --border-light: rgba(255,255,255,0.07);
+  --border-red: rgba(230,0,0,0.35);
   --white: #f0f0f0;
-  --gray: #666;
-  --silver: #b0b0b0;
+  --gray: #888;
+  --silver: #bcbcbc;
+  --glass-bg: linear-gradient(145deg, rgba(26,26,26,0.88), rgba(8,8,8,0.94));
 }
 
 *, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
@@ -26,9 +28,10 @@ nav {
   position:fixed; top:0; left:0; right:0; z-index:200;
   display:flex; align-items:center; justify-content:space-between;
   padding:0 3rem; height:64px;
-  background:rgba(8,8,8,0.96);
-  border-bottom:1px solid var(--border);
-  backdrop-filter:blur(12px);
+  background:rgba(5,5,5,0.92);
+  border-bottom:1px solid var(--border-light);
+  backdrop-filter:blur(16px);
+  -webkit-backdrop-filter:blur(16px);
 }
 .nav-logo { display:flex; align-items:center; gap:0.8rem; font-family:'Bebas Neue', sans-serif; font-size:1.5rem; letter-spacing:0.12em; color:var(--white); text-decoration:none; cursor:pointer; }
 .nav-logo .forma { color:var(--red); }
@@ -51,9 +54,10 @@ nav ul a:hover { color:var(--red); }
 .mobile-menu {
   display:none;
   position:fixed; top:56px; left:0; right:0; z-index:199;
-  background:rgba(8,8,8,0.98);
-  border-bottom:1px solid var(--border);
-  backdrop-filter:blur(16px);
+  background:rgba(5,5,5,0.97);
+  border-bottom:1px solid var(--border-light);
+  backdrop-filter:blur(20px);
+  -webkit-backdrop-filter:blur(20px);
   flex-direction:column;
   padding:0.5rem 0 1rem;
 }
@@ -96,7 +100,13 @@ nav ul a:hover { color:var(--red); }
 .btn-ghost:hover { border-color:var(--red); color:var(--red); }
 .hero-visual { position:absolute; right:0; top:50%; transform:translateY(-50%); width:55%; max-width:800px; z-index:1; opacity:0.85; pointer-events:none; }
 .hero-visual svg { width:100%; }
-.stats-bar { position:absolute; bottom:0; left:0; right:0; z-index:2; border-top:1px solid var(--border); display:grid; grid-template-columns:repeat(4,1fr); background:rgba(8,8,8,0.85); backdrop-filter:blur(8px); }
+.stats-bar { position:absolute; bottom:0; left:0; right:0; z-index:2; border-top:1px solid var(--border-light); display:grid; grid-template-columns:repeat(4,1fr); background:rgba(5,5,5,0.88); backdrop-filter:blur(12px); -webkit-backdrop-filter:blur(12px); }
+
+/* ─── AMBIENT ORBS ─── */
+.orb { position:absolute; border-radius:50%; pointer-events:none; z-index:0; }
+.orb-1 { width:700px; height:700px; top:-200px; right:-100px; background:radial-gradient(circle, rgba(230,0,0,0.13) 0%, transparent 65%); filter:blur(80px); }
+.orb-2 { width:500px; height:500px; bottom:-100px; left:5%; background:radial-gradient(circle, rgba(230,0,0,0.09) 0%, transparent 65%); filter:blur(100px); }
+.orb-3 { width:350px; height:350px; top:35%; left:38%; background:radial-gradient(circle, rgba(230,0,0,0.07) 0%, transparent 70%); filter:blur(90px); }
 .stat-item { padding:1.2rem 2rem; border-right:1px solid var(--border); display:flex; align-items:center; gap:1rem; }
 .stat-item:last-child { border-right:none; }
 .stat-num { font-family:'Bebas Neue',sans-serif; font-size:2rem; color:var(--red); line-height:1; }
@@ -111,11 +121,11 @@ nav ul a:hover { color:var(--red); }
 
 /* ─── SERVICES ─── */
 .services-bg { background:var(--dark); }
-.services-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:1px; background:var(--border); border:1px solid var(--border); }
-.service-card { background:var(--card); padding:2.5rem; position:relative; overflow:hidden; cursor:pointer; transition:background 0.3s; }
-.service-card::before { content:''; position:absolute; top:0; left:0; right:0; height:3px; background:var(--red); transform:scaleX(0); transform-origin:left; transition:transform 0.4s cubic-bezier(0.4,0,0.2,1); }
-.service-card::after { content:''; position:absolute; bottom:-60px; right:-60px; width:160px; height:160px; border-radius:50%; background:radial-gradient(circle, var(--red-glow) 0%, transparent 70%); opacity:0; transition:opacity 0.4s; }
-.service-card:hover { background:#181818; }
+.services-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:12px; }
+.service-card { background:var(--glass-bg); border:1px solid var(--border-light); backdrop-filter:blur(10px); -webkit-backdrop-filter:blur(10px); padding:2.5rem; position:relative; overflow:hidden; cursor:pointer; transition:transform 0.35s cubic-bezier(0.16,1,0.3,1), box-shadow 0.35s ease, border-color 0.3s; border-radius:4px; }
+.service-card::before { content:''; position:absolute; top:0; left:0; right:0; height:3px; background:linear-gradient(90deg, var(--red), rgba(230,0,0,0.4)); transform:scaleX(0); transform-origin:left; transition:transform 0.4s cubic-bezier(0.16,1,0.3,1); }
+.service-card::after { content:''; position:absolute; bottom:-60px; right:-60px; width:200px; height:200px; border-radius:50%; background:radial-gradient(circle, var(--red-glow) 0%, transparent 65%); opacity:0; transition:opacity 0.4s; }
+.service-card:hover { transform:translateY(-6px); box-shadow:0 20px 56px rgba(0,0,0,0.6), 0 0 40px rgba(230,0,0,0.08); border-color:rgba(230,0,0,0.25); }
 .service-card:hover::before { transform:scaleX(1); }
 .service-card:hover::after { opacity:1; }
 .service-num { font-family:'Bebas Neue',sans-serif; font-size:4rem; line-height:1; color:rgba(212,43,43,0.28); margin-bottom:1rem; display:block; letter-spacing:0.05em; }
@@ -137,8 +147,8 @@ nav ul a:hover { color:var(--red); }
 .btn-pick:hover { background:var(--red); color:var(--white); border-color:var(--red); box-shadow:0 0 20px var(--red-glow); }
 
 /* ─── BOOKING ─── */
-.booking-wrap { max-width:960px; margin:0 auto; border:1px solid var(--border); background:var(--card); }
-.booking-header { padding:2rem 2.5rem; border-bottom:1px solid var(--border); display:flex; align-items:center; justify-content:space-between; background:linear-gradient(90deg, rgba(212,43,43,0.06) 0%, transparent 100%); }
+.booking-wrap { max-width:960px; margin:0 auto; border:1px solid var(--border-light); background:var(--glass-bg); backdrop-filter:blur(12px); -webkit-backdrop-filter:blur(12px); border-radius:8px; overflow:hidden; box-shadow:0 24px 64px rgba(0,0,0,0.5); }
+.booking-header { padding:2rem 2.5rem; border-bottom:1px solid var(--border-light); display:flex; align-items:center; justify-content:space-between; background:linear-gradient(90deg, rgba(230,0,0,0.07) 0%, transparent 100%); }
 .booking-header h3 { font-family:'Bebas Neue',sans-serif; font-size:1.8rem; letter-spacing:0.08em; color:var(--white); }
 .booking-header p { font-size:0.8rem; color:var(--gray); margin-top:0.2rem; }
 .booking-step { font-family:'Rajdhani',sans-serif; font-size:0.65rem; font-weight:600; letter-spacing:0.2em; color:var(--red); text-transform:uppercase; }
@@ -147,8 +157,8 @@ nav ul a:hover { color:var(--red); }
 .form-field { display:flex; flex-direction:column; gap:0.4rem; }
 .form-field.full { grid-column:span 2; }
 .form-field label { font-family:'Rajdhani',sans-serif; font-size:0.65rem; font-weight:600; letter-spacing:0.25em; text-transform:uppercase; color:var(--gray); }
-.form-field input, .form-field select, .form-field textarea { background:#0c0c0c; border:1px solid var(--border); color:var(--white); padding:0.85rem 1rem; font-family:'Inter',sans-serif; font-size:0.9rem; outline:none; transition:border-color 0.25s, box-shadow 0.25s; appearance:none; -webkit-appearance:none; border-radius:0; }
-.form-field input:focus, .form-field select:focus, .form-field textarea:focus { border-color:var(--red); box-shadow:0 0 0 2px rgba(212,43,43,0.12); }
+.form-field input, .form-field select, .form-field textarea { background:rgba(0,0,0,0.4); border:1px solid var(--border-light); color:var(--white); padding:0.85rem 1rem; font-family:'Inter',sans-serif; font-size:0.9rem; outline:none; transition:border-color 0.25s, box-shadow 0.25s; appearance:none; -webkit-appearance:none; border-radius:4px; }
+.form-field input:focus, .form-field select:focus, .form-field textarea:focus { border-color:var(--red); box-shadow:0 0 0 3px rgba(230,0,0,0.15); }
 .form-field select option { background:#111; }
 .form-field input::placeholder { color:#333; }
 
@@ -200,16 +210,16 @@ nav ul a:hover { color:var(--red); }
 .success-panel .order-num { font-family:'Bebas Neue',sans-serif; font-size:1.4rem; color:var(--white); margin-top:0.5rem; }
 
 /* ─── WHY ─── */
-.why-grid { display:grid; grid-template-columns:1fr 1fr; gap:1px; background:var(--border); }
-.why-item { background:var(--dark); padding:2.5rem; border-left:3px solid transparent; transition:border-color 0.3s, background 0.3s; }
-.why-item:hover { border-left-color:var(--red); background:var(--card); }
+.why-grid { display:grid; grid-template-columns:1fr 1fr; gap:12px; }
+.why-item { background:var(--glass-bg); border:1px solid var(--border-light); backdrop-filter:blur(10px); -webkit-backdrop-filter:blur(10px); padding:2.5rem; border-radius:12px; transition:transform 0.35s cubic-bezier(0.16,1,0.3,1), box-shadow 0.35s ease, border-color 0.3s; }
+.why-item:hover { transform:translateY(-5px); box-shadow:0 16px 48px rgba(0,0,0,0.5), 0 0 0 1px rgba(230,0,0,0.3); border-color:rgba(230,0,0,0.3); }
 .why-icon { width:48px; height:48px; margin-bottom:1.2rem; color:var(--red); }
 .why-icon svg { width:100%; height:100%; }
 .why-title { font-family:'Rajdhani',sans-serif; font-size:1rem; font-weight:700; letter-spacing:0.15em; text-transform:uppercase; margin-bottom:0.5rem; color:var(--white); }
 .why-desc { font-size:0.85rem; color:var(--gray); line-height:1.65; }
 
 /* ─── FOOTER ─── */
-footer { background:var(--dark); border-top:1px solid var(--border); padding:3rem 3rem 2rem; }
+footer { background:var(--dark); border-top:1px solid var(--border-light); padding:3rem 3rem 2rem; }
 .footer-top { display:grid; grid-template-columns:2fr 1fr 1fr; gap:3rem; margin-bottom:2rem; }
 .footer-logo { font-family:'Bebas Neue',sans-serif; font-size:1.8rem; letter-spacing:0.1em; margin-bottom:0.8rem; display:block; }
 .footer-logo .forma { color:var(--red); }
