@@ -232,14 +232,13 @@ nav ul a:hover { color:var(--red); }
   overflow:hidden;
 }
 .svc-drop-item {
-  width:100%; padding:0.7rem 1rem; border:none; background:none; cursor:pointer; text-align:left;
+  width:100%; padding:0.75rem 1rem; border:none; background:none; cursor:pointer; text-align:left;
   border-bottom:1px solid var(--border); transition:background 0.15s, color 0.15s;
-  font-family:'Rajdhani',sans-serif; font-size:0.9rem; font-weight:600;
-  letter-spacing:0.06em; text-transform:uppercase; color:var(--silver);
+  font-family:'Inter',sans-serif; font-size:0.9rem; font-weight:400; color:var(--silver);
 }
 .svc-drop-item:last-child { border-bottom:none; }
 .svc-drop-item:hover { background:rgba(230,0,0,0.07); color:var(--white); }
-.svc-drop-item.active { background:rgba(230,0,0,0.12); color:var(--red); }
+.svc-drop-item.active { background:rgba(230,0,0,0.12); color:var(--white); font-weight:500; }
 
 /* ─── ORDER CARDS (CRM) ─── */
 .orders-toolbar { display:flex; gap:0.8rem; align-items:center; flex-wrap:wrap; margin-bottom:0.75rem; }
