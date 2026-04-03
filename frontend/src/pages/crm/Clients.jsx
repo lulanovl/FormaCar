@@ -148,10 +148,21 @@ export default function Clients({ isActive }) {
                         <span style={{ fontSize: '0.82rem', color: 'var(--silver)' }}>{formatDate(o.date)} {o.time_slot}</span>
                       </div>
                       <div className="client-history-bot">
-                        <span style={{ fontSize: '0.83rem' }}>{o.service_name}{o.car_type_name ? ' · ' + o.car_type_name : ''}</span>
-                        {o.price_snapshot ? (
-                          <span className="td-price">{o.price_snapshot.toLocaleString('ru-RU')}</span>
-                        ) : <span style={{ color: 'var(--gray)' }}>—</span>}
+                        <span style={{ fontSize: '0.83rem' }}>
+                          {o.service_name}{o.car_type_name ? ' · ' + o.car_type_name : ''}
+                          {o.extras_price > 0 && (
+                            <span style={{ color: 'var(--gray)', fontSize: '0.75rem', display: 'block', marginTop: '0.15rem' }}>
+                              {o.price_snapshot ? o.price_snapshot.toLocaleString('ru-RU') + ' + ' : ''}
+                              доп. {o.extras_price.toLocaleString('ru-RU')} сом
+                            </span>
+                          )}
+                        </span>
+                        {(() => {
+                          const total = (o.price_snapshot || 0) + (o.extras_price || 0);
+                          return total ? (
+                            <span className="td-price">{total.toLocaleString('ru-RU')}</span>
+                          ) : <span style={{ color: 'var(--gray)' }}>—</span>;
+                        })()}
                       </div>
                     </div>
                   ))}

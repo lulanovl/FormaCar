@@ -192,7 +192,7 @@ export default function SitePage({ onCrmClick }) {
           <div className="why-item">
             <div className="why-icon">
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
-                <path d="M12 2L3 7v6c0 5.25 3.75 10.15 9 11.25C17.25 23.15 21 18.25 21 13V7L12 2z"/>
+                <path d="M12 2L3 7v6c0 4.5 3.25 8.75 9 10 5.75-1.25 9-5.5 9-10V7L12 2z"/>
                 <path d="M8.5 12.5l2.5 2.5 4.5-4.5"/>
               </svg>
             </div>

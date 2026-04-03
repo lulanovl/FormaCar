@@ -863,8 +863,11 @@ tr:hover td { background:rgba(212,43,43,0.03); }
   .dash-cards-mobile { display:flex; }
   td, th { padding:0.7rem 0.9rem; }
   .crm-table-header { flex-direction:column; align-items:flex-start; gap:0.8rem; }
-  .search-input { width:100%; }
+  .search-input { width:100%; font-size:1rem; }
   .crm-page-title { font-size:1.6rem; }
+  /* Prevent iOS auto-zoom on input focus (font-size must be ≥16px) */
+  .form-field input, .form-field select, .form-field textarea,
+  .search-input, .price-input { font-size:1rem; }
   .add-form { flex-direction:column; }
   .add-form .form-field { min-width:unset; width:100%; }
 }
