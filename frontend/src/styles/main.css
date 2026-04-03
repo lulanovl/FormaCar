@@ -329,17 +329,20 @@ nav ul a:hover { color:var(--red); }
 .ocd-price { font-family:'Bebas Neue',sans-serif; font-size:1.1rem; color:var(--red); letter-spacing:0.05em; display:flex; align-items:center; gap:6px; flex-wrap:wrap; }
 .ocd-original-price { font-size:0.75rem; color:var(--gray); text-decoration:line-through; letter-spacing:0; }
 .ocd-discount-tag { display:inline-block; font-family:'Rajdhani',sans-serif; font-size:0.55rem; font-weight:700; letter-spacing:0.12em; text-transform:uppercase; color:#4caf7d; border:1px solid #4caf7d; padding:1px 5px; border-radius:2px; vertical-align:middle; margin-left:4px; }
-.ocd-edit-price-btn, .ocd-reset-price-btn { background:none; border:none; color:var(--gray); cursor:pointer; font-size:0.85rem; padding:0 2px; line-height:1; transition:color 0.2s; }
-.ocd-edit-price-btn:hover { color:var(--white); }
-.ocd-reset-price-btn:hover { color:#4caf7d; }
-.ocd-price-edit { display:flex; align-items:center; gap:6px; }
-.ocd-price-input { background:rgba(255,255,255,0.06); border:1px solid var(--border); color:var(--white); font-family:'Bebas Neue',sans-serif; font-size:1.1rem; letter-spacing:0.05em; padding:2px 8px; width:100px; outline:none; }
-.ocd-price-input:focus { border-color:var(--red); }
+.ocd-editable-val { display:flex; align-items:center; gap:6px; flex-wrap:wrap; }
+.ocd-plate-text { font-family:monospace; letter-spacing:0.1em; }
+.ocd-inline-edit-btn { background:none; border:1px solid var(--border); color:var(--gray); cursor:pointer; width:26px; height:26px; display:inline-flex; align-items:center; justify-content:center; flex-shrink:0; transition:border-color 0.2s, color 0.2s; padding:0; }
+.ocd-inline-edit-btn:hover { border-color:var(--white); color:var(--white); }
+.ocd-reset-btn:hover { border-color:#4caf7d; color:#4caf7d; }
+.ocd-inline-edit { display:flex; align-items:center; gap:6px; flex-wrap:wrap; }
+.ocd-inline-input { background:rgba(255,255,255,0.06); border:1px solid var(--border); color:var(--white); font-size:0.85rem; padding:3px 8px; width:120px; outline:none; }
+.ocd-inline-input-price { font-family:'Bebas Neue',sans-serif; font-size:1.1rem; letter-spacing:0.05em; width:100px; }
+.ocd-inline-input:focus { border-color:var(--red); }
 .ocd-price-unit { font-family:'Bebas Neue',sans-serif; font-size:1.1rem; color:var(--gray); letter-spacing:0.05em; }
-.ocd-price-btn { background:none; border:1px solid var(--border); color:var(--gray); cursor:pointer; font-size:0.8rem; width:26px; height:26px; display:flex; align-items:center; justify-content:center; transition:border-color 0.2s, color 0.2s; }
-.ocd-price-save { border-color:#4caf7d; color:#4caf7d; }
-.ocd-price-save:hover { background:rgba(76,175,125,0.12); }
-.ocd-price-cancel:hover { border-color:var(--red); color:var(--red); }
+.ocd-inline-btn { background:none; border:1px solid var(--border); color:var(--gray); cursor:pointer; font-family:'Rajdhani',sans-serif; font-size:0.7rem; font-weight:700; letter-spacing:0.1em; padding:0 8px; height:26px; display:inline-flex; align-items:center; transition:border-color 0.2s, color 0.2s; }
+.ocd-inline-save { border-color:#4caf7d; color:#4caf7d; }
+.ocd-inline-save:hover { background:rgba(76,175,125,0.12); }
+.ocd-inline-btn:not(.ocd-inline-save):hover { border-color:var(--red); color:var(--red); }
 
 /* ─── WHY ─── */
 .why-grid { display:grid; grid-template-columns:1fr 1fr; gap:12px; }
@@ -632,6 +635,12 @@ tr:hover td { background:rgba(212,43,43,0.03); }
 .mform input:focus, .mform select:focus { border-color:var(--red); }
 .mform .btn-primary { font-family:'Rajdhani',sans-serif; font-size:0.85rem; font-weight:700; letter-spacing:0.15em; clip-path:none; }
 .mform .car-type-grid { grid-template-columns:repeat(4,1fr); }
+.mform-extras { display:flex; flex-direction:column; gap:0.4rem; }
+.mform-extra-item { display:flex; align-items:center; gap:0.6rem; padding:0.5rem 0.75rem; border:1px solid var(--border); cursor:pointer; transition:border-color 0.2s, background 0.2s; }
+.mform-extra-item input[type="checkbox"] { accent-color:var(--red); width:14px; height:14px; flex-shrink:0; cursor:pointer; }
+.mform-extra-item.selected { border-color:rgba(212,43,43,0.5); background:rgba(212,43,43,0.06); }
+.mform-extra-name { flex:1; font-size:0.85rem; color:var(--white); }
+.mform-extra-price { font-family:'Bebas Neue',sans-serif; font-size:0.9rem; color:var(--gray); letter-spacing:0.05em; }
 .error-msg { font-size:0.8rem; color:var(--red); }
 
 /* ─── CALENDAR PICKER ─── */

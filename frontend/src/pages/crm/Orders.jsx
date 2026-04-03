@@ -144,17 +144,44 @@ function OrderCard({ o, onAction, onUpdatePrice, onUpdatePlate, isOpen, onToggle
       {isOpen && (
         <div className="ocard-details">
           <div className="ocd-grid">
+            {/* Left col: Услуга */}
             <div className="ocd-item"><span className="ocd-label">Услуга</span><span className="ocd-val">{o.service_name}</span></div>
+            {/* Right col: Гос. номер */}
+            <div className="ocd-item">
+              <span className="ocd-label">Гос. номер</span>
+              {editingPlate ? (
+                <span className="ocd-inline-edit" onClick={e => e.stopPropagation()}>
+                  <input
+                    className="ocd-inline-input"
+                    type="text"
+                    value={plateInput}
+                    onChange={e => setPlateInput(e.target.value.toUpperCase())}
+                    autoFocus
+                  />
+                  <button className="ocd-inline-btn ocd-inline-save" onClick={savePlate} disabled={savingPlate}>OK</button>
+                  <button className="ocd-inline-btn" onClick={cancelEditPlate}>—</button>
+                </span>
+              ) : (
+                <span className="ocd-val ocd-editable-val">
+                  <span className="ocd-plate-text">{o.plate_number || '—'}</span>
+                  <button className="ocd-inline-edit-btn" onClick={startEditPlate} title="Изменить номер">
+                    <svg viewBox="0 0 16 16" fill="none" width="13" height="13"><path d="M11.5 2.5l2 2-8 8H3.5v-2l8-8z" stroke="currentColor" strokeWidth="1.4" strokeLinejoin="round"/></svg>
+                  </button>
+                </span>
+              )}
+            </div>
+            {/* Left col: Тип кузова */}
             <div className="ocd-item"><span className="ocd-label">Тип кузова</span><span className="ocd-val">{o.car_type_name || '—'}</span></div>
+            {/* Right col: Сумма */}
             <div className="ocd-item">
               <span className="ocd-label">
                 Сумма
                 {hasDiscount && <span className="ocd-discount-tag">скидка</span>}
               </span>
               {editingPrice ? (
-                <span className="ocd-price-edit" onClick={e => e.stopPropagation()}>
+                <span className="ocd-inline-edit" onClick={e => e.stopPropagation()}>
                   <input
-                    className="ocd-price-input"
+                    className="ocd-inline-input ocd-inline-input-price"
                     type="number"
                     min="0"
                     value={priceInput}
@@ -162,45 +189,27 @@ function OrderCard({ o, onAction, onUpdatePrice, onUpdatePlate, isOpen, onToggle
                     autoFocus
                   />
                   <span className="ocd-price-unit">сом</span>
-                  <button className="ocd-price-btn ocd-price-save" onClick={savePrice} disabled={savingPrice}>✓</button>
-                  <button className="ocd-price-btn ocd-price-cancel" onClick={cancelEdit}>✕</button>
+                  <button className="ocd-inline-btn ocd-inline-save" onClick={savePrice} disabled={savingPrice}>OK</button>
+                  <button className="ocd-inline-btn" onClick={cancelEdit}>—</button>
                 </span>
               ) : (
-                <span className="ocd-val ocd-price">
+                <span className="ocd-val ocd-price ocd-editable-val">
                   {total ? total.toLocaleString('ru-RU') + ' сом' : '—'}
                   {hasDiscount && calculated > 0 && (
                     <span className="ocd-original-price">{calculated.toLocaleString('ru-RU')} сом</span>
                   )}
-                  <button className="ocd-edit-price-btn" onClick={startEdit} title="Изменить сумму">✎</button>
+                  <button className="ocd-inline-edit-btn" onClick={startEdit} title="Изменить сумму">
+                    <svg viewBox="0 0 16 16" fill="none" width="13" height="13"><path d="M11.5 2.5l2 2-8 8H3.5v-2l8-8z" stroke="currentColor" strokeWidth="1.4" strokeLinejoin="round"/></svg>
+                  </button>
                   {hasDiscount && (
-                    <button className="ocd-reset-price-btn" onClick={resetPrice} title="Сбросить к расчётной сумме" disabled={savingPrice}>↩</button>
+                    <button className="ocd-inline-edit-btn ocd-reset-btn" onClick={resetPrice} title="Сбросить к расчётной сумме" disabled={savingPrice}>
+                      <svg viewBox="0 0 16 16" fill="none" width="13" height="13"><path d="M3 8a5 5 0 1 0 1.5-3.5" stroke="currentColor" strokeWidth="1.4" strokeLinecap="round"/><path d="M3 4.5V8h3.5" stroke="currentColor" strokeWidth="1.4" strokeLinecap="round" strokeLinejoin="round"/></svg>
+                    </button>
                   )}
                 </span>
               )}
             </div>
             {o.note && <div className="ocd-item ocd-item-full"><span className="ocd-label">Комментарий</span><span className="ocd-val">{o.note}</span></div>}
-            <div className="ocd-item">
-              <span className="ocd-label">Гос. номер</span>
-              {editingPlate ? (
-                <span className="ocd-price-edit" onClick={e => e.stopPropagation()}>
-                  <input
-                    className="ocd-price-input"
-                    style={{ width: '120px', fontSize: '0.85rem', fontFamily: 'inherit', letterSpacing: '0.1em' }}
-                    type="text"
-                    value={plateInput}
-                    onChange={e => setPlateInput(e.target.value.toUpperCase())}
-                    autoFocus
-                  />
-                  <button className="ocd-price-btn ocd-price-save" onClick={savePlate} disabled={savingPlate}>✓</button>
-                  <button className="ocd-price-btn ocd-price-cancel" onClick={cancelEditPlate}>✕</button>
-                </span>
-              ) : (
-                <span className="ocd-val" style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
-                  <span style={{ fontFamily: 'monospace', letterSpacing: '0.1em' }}>{o.plate_number || '—'}</span>
-                  <button className="ocd-edit-price-btn" onClick={startEditPlate} title="Добавить / изменить номер">✎</button>
-                </span>
-              )}
-            </div>
           </div>
         </div>
       )}

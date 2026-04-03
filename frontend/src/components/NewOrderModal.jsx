@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { getServices, getCarTypes, createOrderAdmin } from '../api/index.js';
+import { getServices, getCarTypes, getAllAdditionalServices, createOrderAdmin } from '../api/index.js';
 import { todayISO } from '../utils/format.js';
 import { toastSuccess } from './toast.js';
 import CalendarPicker from './CalendarPicker.jsx';
@@ -10,9 +10,12 @@ const TIME_SLOTS = [
   '18:00','19:00','20:00','21:00','22:00','23:00',
 ];
 
+const FIELD_LABEL = { fontFamily: "'Rajdhani',sans-serif", fontSize: '0.65rem', fontWeight: 600, letterSpacing: '0.25em', textTransform: 'uppercase', color: 'var(--gray)', marginBottom: '0.5rem' };
+
 export default function NewOrderModal({ onClose, onSuccess }) {
   const [services, setServices] = useState([]);
   const [carTypes, setCarTypes] = useState([]);
+  const [extras, setExtras] = useState([]);
   const [loading, setLoading] = useState(true);
 
   const [name, setName] = useState('');
@@ -21,6 +24,7 @@ export default function NewOrderModal({ onClose, onSuccess }) {
   const [plate, setPlate] = useState('');
   const [serviceId, setServiceId] = useState('');
   const [carTypeId, setCarTypeId] = useState(null);
+  const [selectedExtras, setSelectedExtras] = useState(new Set());
   const [date, setDate] = useState(todayISO());
   const [time, setTime] = useState('');
   const [note, setNote] = useState('');
@@ -28,11 +32,19 @@ export default function NewOrderModal({ onClose, onSuccess }) {
   const [submitting, setSubmitting] = useState(false);
 
   useEffect(() => {
-    Promise.all([getServices(), getCarTypes()])
-      .then(([svcs, cts]) => { setServices(svcs); setCarTypes(cts); })
+    Promise.all([getServices(), getCarTypes(), getAllAdditionalServices()])
+      .then(([svcs, cts, exts]) => { setServices(svcs); setCarTypes(cts); setExtras(exts); })
       .catch((err) => setError(err.message))
       .finally(() => setLoading(false));
   }, []);
+
+  function toggleExtra(id) {
+    setSelectedExtras(prev => {
+      const next = new Set(prev);
+      if (next.has(id)) next.delete(id); else next.add(id);
+      return next;
+    });
+  }
 
   async function handleSubmit() {
     setError('');
@@ -53,6 +65,7 @@ export default function NewOrderModal({ onClose, onSuccess }) {
         plate_number: plate || undefined,
         service_id: Number(serviceId),
         car_type_id: carTypeId,
+        additional_service_ids: [...selectedExtras],
         date,
         time_slot: time,
         note,
@@ -90,9 +103,7 @@ export default function NewOrderModal({ onClose, onSuccess }) {
 
             {/* Car type */}
             <div>
-              <div style={{ fontFamily: "'Rajdhani',sans-serif", fontSize: '0.65rem', fontWeight: 600, letterSpacing: '0.25em', textTransform: 'uppercase', color: 'var(--gray)', marginBottom: '0.5rem' }}>
-                Тип кузова
-              </div>
+              <div style={FIELD_LABEL}>Тип кузова</div>
               <div className="car-type-grid mform-ct">
                 {carTypes.map(ct => (
                   <button
@@ -108,19 +119,35 @@ export default function NewOrderModal({ onClose, onSuccess }) {
               </div>
             </div>
 
-            {/* Date — CalendarPicker */}
-            <div>
-              <div style={{ fontFamily: "'Rajdhani',sans-serif", fontSize: '0.65rem', fontWeight: 600, letterSpacing: '0.25em', textTransform: 'uppercase', color: 'var(--gray)', marginBottom: '0.5rem' }}>
-                Дата
+            {/* Additional services */}
+            {extras.length > 0 && (
+              <div>
+                <div style={FIELD_LABEL}>Доп. услуги (необязательно)</div>
+                <div className="mform-extras">
+                  {extras.map(e => (
+                    <label key={e.id} className={`mform-extra-item ${selectedExtras.has(e.id) ? 'selected' : ''}`}>
+                      <input
+                        type="checkbox"
+                        checked={selectedExtras.has(e.id)}
+                        onChange={() => toggleExtra(e.id)}
+                      />
+                      <span className="mform-extra-name">{e.name}</span>
+                      <span className="mform-extra-price">{Number(e.price).toLocaleString('ru-RU')} сом</span>
+                    </label>
+                  ))}
+                </div>
               </div>
+            )}
+
+            {/* Date */}
+            <div>
+              <div style={FIELD_LABEL}>Дата</div>
               <CalendarPicker value={date} onChange={setDate} minDate={todayISO()} />
             </div>
 
-            {/* Time — slot grid */}
+            {/* Time */}
             <div>
-              <div style={{ fontFamily: "'Rajdhani',sans-serif", fontSize: '0.65rem', fontWeight: 600, letterSpacing: '0.25em', textTransform: 'uppercase', color: 'var(--gray)', marginBottom: '0.5rem' }}>
-                Время
-              </div>
+              <div style={FIELD_LABEL}>Время</div>
               <div className="cp-time-grid">
                 {TIME_SLOTS.map(t => (
                   <button
