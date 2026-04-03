@@ -428,6 +428,8 @@ footer { background:var(--dark); border-top:1px solid var(--border-light); paddi
 
 /* Tables */
 .crm-table-wrap { background:var(--dark); border:1px solid var(--border); margin-bottom:2rem; }
+.dash-cards-mobile { display:none; flex-direction:column; gap:8px; padding:1rem; }
+.dash-table-desktop { display:block; }
 .crm-table-header { padding:1rem 1.5rem; border-bottom:1px solid var(--border); display:flex; align-items:center; justify-content:space-between; gap:1rem; flex-wrap:wrap; }
 .crm-table-title { font-family:'Rajdhani',sans-serif; font-size:0.8rem; font-weight:700; letter-spacing:0.15em; text-transform:uppercase; color:var(--white); }
 .filters { display:flex; gap:4px; flex-wrap:wrap; }
@@ -857,6 +859,8 @@ tr:hover td { background:rgba(212,43,43,0.03); }
   .chart-row { grid-template-columns:1fr; }
   .crm-table-wrap { overflow-x:auto; }
   table { min-width:560px; }
+  .dash-table-desktop { display:none; }
+  .dash-cards-mobile { display:flex; }
   td, th { padding:0.7rem 0.9rem; }
   .crm-table-header { flex-direction:column; align-items:flex-start; gap:0.8rem; }
   .search-input { width:100%; }

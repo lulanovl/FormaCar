@@ -200,45 +200,91 @@ export default function Dashboard({ isActive, refreshKey, onNewOrder, onOpenChec
             </button>
           )}
         </div>
-        <table>
-          <thead>
-            <tr><th>#</th><th>Клиент</th><th>Авто</th><th>Услуга</th><th>Тип</th><th>Время</th><th>Статус</th><th>Действия</th></tr>
-          </thead>
-          <tbody>
-            {chartDayLoading ? (
-              <tr><td colSpan={8} style={{ textAlign: 'center', color: 'var(--gray)', padding: '2rem' }}>Загрузка...</td></tr>
-            ) : displayOrders.length === 0 ? (
-              <tr><td colSpan={8} style={{ textAlign: 'center', color: 'var(--gray)', padding: '2rem' }}>Заказов нет</td></tr>
-            ) : displayOrders.map(o => (
-              <tr key={o.id}>
-                <td className="td-num">{o.order_number}</td>
-                <td>{o.client_name}</td>
-                <td style={{ color: 'var(--gray)' }}>{o.client_car}</td>
-                <td>{o.service_name}</td>
-                <td>{o.car_type_name || '—'}</td>
-                <td>{o.time_slot}</td>
-                <td><span className={`badge ${STATUS_BADGE[o.status] || 'badge-new'}`}>{STATUS_LABEL[o.status] || o.status}</span></td>
-                <td>
-                  {o.status === 'new' && (
-                    <>
-                      <button className="act-btn ok" onClick={() => handleOrderAction(o.id, 'confirmed')}>Принять</button>
-                      <button className="act-btn danger" onClick={() => handleOrderAction(o.id, 'rejected')}>Отклонить</button>
-                    </>
-                  )}
-                  {o.status === 'confirmed' && (
-                    <button className="act-btn ok" onClick={() => handleOrderAction(o.id, 'wip')}>В работу</button>
-                  )}
-                  {o.status === 'wip' && (
-                    <button className="act-btn checklist" onClick={() => handleOrderAction(o.id, 'checklist')}>✓ Проверка</button>
-                  )}
-                  {o.status === 'done' && (
-                    <span style={{ color: '#4caf7d', fontSize: '0.8rem' }}>✓ Готово</span>
-                  )}
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
+
+        {/* Desktop table */}
+        <div className="dash-table-desktop">
+          <table>
+            <thead>
+              <tr><th>#</th><th>Клиент</th><th>Авто</th><th>Услуга</th><th>Тип</th><th>Время</th><th>Статус</th><th>Действия</th></tr>
+            </thead>
+            <tbody>
+              {chartDayLoading ? (
+                <tr><td colSpan={8} style={{ textAlign: 'center', color: 'var(--gray)', padding: '2rem' }}>Загрузка...</td></tr>
+              ) : displayOrders.length === 0 ? (
+                <tr><td colSpan={8} style={{ textAlign: 'center', color: 'var(--gray)', padding: '2rem' }}>Заказов нет</td></tr>
+              ) : displayOrders.map(o => (
+                <tr key={o.id}>
+                  <td className="td-num">{o.order_number}</td>
+                  <td>{o.client_name}</td>
+                  <td style={{ color: 'var(--gray)' }}>{o.client_car}</td>
+                  <td>{o.service_name}</td>
+                  <td>{o.car_type_name || '—'}</td>
+                  <td>{o.time_slot}</td>
+                  <td><span className={`badge ${STATUS_BADGE[o.status] || 'badge-new'}`}>{STATUS_LABEL[o.status] || o.status}</span></td>
+                  <td>
+                    {o.status === 'new' && (
+                      <>
+                        <button className="act-btn ok" onClick={() => handleOrderAction(o.id, 'confirmed')}>Принять</button>
+                        <button className="act-btn danger" onClick={() => handleOrderAction(o.id, 'rejected')}>Отклонить</button>
+                      </>
+                    )}
+                    {o.status === 'confirmed' && (
+                      <button className="act-btn ok" onClick={() => handleOrderAction(o.id, 'wip')}>В работу</button>
+                    )}
+                    {o.status === 'wip' && (
+                      <button className="act-btn checklist" onClick={() => handleOrderAction(o.id, 'checklist')}>✓ Проверка</button>
+                    )}
+                    {o.status === 'done' && (
+                      <span style={{ color: '#4caf7d', fontSize: '0.8rem' }}>✓ Готово</span>
+                    )}
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+
+        {/* Mobile cards */}
+        <div className="dash-cards-mobile">
+          {chartDayLoading ? (
+            <div className="loading" style={{ margin: '1.5rem 0' }} />
+          ) : displayOrders.length === 0 ? (
+            <div style={{ textAlign: 'center', color: 'var(--gray)', padding: '2rem 0' }}>Заказов нет</div>
+          ) : displayOrders.map(o => (
+            <div key={o.id} className={`ocard ocard-${o.status}`}>
+              <div className="ocard-header">
+                <div className="ocard-header-left">
+                  <span className="ocard-num">{o.order_number}</span>
+                  <span className={`badge ${STATUS_BADGE[o.status] || 'badge-new'}`}>{STATUS_LABEL[o.status] || o.status}</span>
+                </div>
+                <span className="ocard-time">{o.time_slot}</span>
+              </div>
+              <div className="ocard-client">
+                <div className="ocard-client-info">
+                  <span className="ocard-client-name">{o.client_name}</span>
+                  <span className="ocard-client-car">{o.client_car}{o.service_name ? ' · ' + o.service_name : ''}</span>
+                </div>
+              </div>
+              <div className="ocard-actions">
+                {o.status === 'new' && (
+                  <>
+                    <button className="ocard-btn ocard-btn-ok" onClick={() => handleOrderAction(o.id, 'confirmed')}>✓ Принять</button>
+                    <button className="ocard-btn ocard-btn-danger" onClick={() => handleOrderAction(o.id, 'rejected')}>✕ Отклонить</button>
+                  </>
+                )}
+                {o.status === 'confirmed' && (
+                  <button className="ocard-btn ocard-btn-ok" onClick={() => handleOrderAction(o.id, 'wip')}>▶ В работу</button>
+                )}
+                {o.status === 'wip' && (
+                  <button className="ocard-btn ocard-btn-check" onClick={() => handleOrderAction(o.id, 'checklist')}>✓ Проверка</button>
+                )}
+                {o.status === 'done' && (
+                  <span className="ocard-done">✓ Выполнен</span>
+                )}
+              </div>
+            </div>
+          ))}
+        </div>
       </div>
     </>
   );

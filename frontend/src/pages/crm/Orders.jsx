@@ -27,9 +27,9 @@ function OrderCard({ o, onAction, isOpen, onToggle, highlighted }) {
   const total = (o.price_snapshot || 0) + (o.extras_price || 0);
 
   return (
-    <div id={`ocard-${o.id}`} className={`ocard ${isOpen ? 'ocard-open' : ''} ocard-${o.status}${highlighted ? ' ocard-highlighted' : ''}`}>
+    <div id={`ocard-${o.id}`} className={`ocard ${isOpen ? 'ocard-open' : ''} ocard-${o.status}${highlighted ? ' ocard-highlighted' : ''}`} onClick={onToggle} style={{ cursor: 'pointer' }}>
       {/* Top row: number + status + date/time */}
-      <div className="ocard-header" onClick={onToggle}>
+      <div className="ocard-header">
         <div className="ocard-header-left">
           <span className="ocard-num">{o.order_number}</span>
           <span className={`badge ${STATUS_BADGE[o.status] || 'badge-new'}`}>
@@ -64,7 +64,7 @@ function OrderCard({ o, onAction, isOpen, onToggle, highlighted }) {
       </div>
 
       {/* Action buttons — always visible */}
-      <div className="ocard-actions">
+      <div className="ocard-actions" onClick={e => e.stopPropagation()}>
         {o.status === 'new' && (
           <>
             <button className="ocard-btn ocard-btn-ok" onClick={() => onAction(o.id, 'confirmed')}>✓ Принять</button>
