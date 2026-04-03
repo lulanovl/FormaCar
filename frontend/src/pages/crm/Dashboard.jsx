@@ -89,6 +89,18 @@ export default function Dashboard({ isActive, refreshKey, onNewOrder, onOpenChec
     ? new Date(selectedChartDate + 'T00:00:00').toLocaleDateString('ru-RU', { weekday: 'long', day: 'numeric', month: 'long' })
     : 'сегодня';
 
+  // KPI values: if a past day is selected, compute from fetched orders
+  const kpi = chartDayOrders ? {
+    today_orders_count: chartDayOrders.length,
+    today_revenue: chartDayOrders
+      .filter(o => o.status === 'done')
+      .reduce((s, o) => s + (o.price_snapshot || 0) + (o.extras_price || 0), 0),
+    pending_count: chartDayOrders.filter(o => o.status === 'new').length,
+    total_clients: data.total_clients,
+  } : data;
+  const kpiDayLabel = selectedChartDate ? 'Заказов за день' : 'Заказов сегодня';
+  const kpiRevLabel = selectedChartDate ? 'Выручка за день' : 'Выручка сегодня';
+
   return (
     <>
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '1.5rem', flexWrap: 'wrap', gap: '1rem' }}>
@@ -103,27 +115,27 @@ export default function Dashboard({ isActive, refreshKey, onNewOrder, onOpenChec
 
       <div className="kpi-row">
         <div className="kpi kpi-link" onClick={() => onNavigate?.('orders', 'all')} title="Перейти к заказам">
-          <div className="kpi-label">Заказов сегодня</div>
-          <div className="kpi-val">{data.today_orders_count}</div>
+          <div className="kpi-label">{kpiDayLabel}</div>
+          <div className="kpi-val">{kpi.today_orders_count}</div>
           <div className="kpi-delta">Смотреть все →</div>
         </div>
         <div className="kpi">
-          <div className="kpi-label">Выручка сегодня</div>
+          <div className="kpi-label">{kpiRevLabel}</div>
           <div className="kpi-val" style={{ fontSize: '1.6rem' }}>
-            {data.today_revenue ? data.today_revenue.toLocaleString('ru-RU') + ' сом' : '—'}
+            {kpi.today_revenue ? kpi.today_revenue.toLocaleString('ru-RU') + ' сом' : '—'}
           </div>
         </div>
         <div className="kpi kpi-link" onClick={() => onNavigate?.('orders', 'new')} title="Перейти к новым заказам">
           <div className="kpi-label">В ожидании</div>
-          <div className="kpi-val">{data.pending_count}</div>
-          {data.pending_count > 0
+          <div className="kpi-val">{kpi.pending_count}</div>
+          {kpi.pending_count > 0
             ? <div className="kpi-delta neg">Принять →</div>
             : <div className="kpi-delta">Смотреть →</div>
           }
         </div>
         <div className="kpi kpi-link" onClick={() => onNavigate?.('clients')} title="Перейти к клиентам">
           <div className="kpi-label">Клиентов всего</div>
-          <div className="kpi-val">{data.total_clients}</div>
+          <div className="kpi-val">{kpi.total_clients}</div>
           <div className="kpi-delta">База клиентов →</div>
         </div>
       </div>

@@ -1,6 +1,35 @@
-import { useState } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import ServicesSection from './ServicesSection.jsx';
 import BookingForm from './BookingForm.jsx';
+
+function CountUp({ to, decimals = 0, suffix = '', duration = 1800 }) {
+  const [val, setVal] = useState(0);
+  const spanRef = useRef(null);
+  const started = useRef(false);
+
+  useEffect(() => {
+    const el = spanRef.current;
+    if (!el) return;
+    const obs = new IntersectionObserver(([entry]) => {
+      if (entry.isIntersecting && !started.current) {
+        started.current = true;
+        const steps = 60;
+        const inc = to / steps;
+        let cur = 0;
+        const id = setInterval(() => {
+          cur += inc;
+          if (cur >= to) { cur = to; clearInterval(id); }
+          setVal(cur);
+        }, duration / steps);
+      }
+    }, { threshold: 0.4 });
+    obs.observe(el);
+    return () => obs.disconnect();
+  }, [to, duration]);
+
+  const display = decimals > 0 ? val.toFixed(decimals) : Math.floor(val);
+  return <span ref={spanRef}>{display}{suffix}</span>;
+}
 
 export default function SitePage({ onCrmClick }) {
   const [preSelectService, setPreSelectService] = useState(null);
@@ -113,10 +142,10 @@ export default function SitePage({ onCrmClick }) {
           </svg>
         </div>
         <div className="stats-bar">
-          <div className="stat-item"><div><div className="stat-num">1200+</div><div className="stat-label">Клиентов</div></div></div>
-          <div className="stat-item"><div><div className="stat-num">4.9</div><div className="stat-label">Рейтинг</div></div></div>
-          <div className="stat-item"><div><div className="stat-num">3</div><div className="stat-label">Года на рынке</div></div></div>
-          <div className="stat-item"><div><div className="stat-num">100%</div><div className="stat-label">Гарантия</div></div></div>
+          <div className="stat-item"><div><div className="stat-num"><CountUp to={1200} suffix="+" /></div><div className="stat-label">Клиентов</div></div></div>
+          <div className="stat-item"><div><div className="stat-num"><CountUp to={4.9} decimals={1} /></div><div className="stat-label">Рейтинг</div></div></div>
+          <div className="stat-item"><div><div className="stat-num"><CountUp to={3} /></div><div className="stat-label">Года на рынке</div></div></div>
+          <div className="stat-item"><div><div className="stat-num"><CountUp to={100} suffix="%" /></div><div className="stat-label">Гарантия</div></div></div>
         </div>
       </section>
 
