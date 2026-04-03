@@ -533,6 +533,37 @@ tr:hover td { background:rgba(212,43,43,0.03); }
 .price-svc-card-price-row { display:flex; align-items:center; gap:0.6rem; }
 .price-svc-card-currency { font-family:'Rajdhani',sans-serif; font-size:0.72rem; color:var(--gray); flex-shrink:0; }
 
+/* ─── ANALYTICS ─── */
+.an-period { display:flex; align-items:center; gap:1rem; margin-bottom:1.5rem; }
+.an-period-btn { background:none; border:1px solid var(--border); color:var(--white); font-size:1.4rem; line-height:1; width:36px; height:36px; cursor:pointer; display:flex; align-items:center; justify-content:center; transition:border-color 0.2s, color 0.2s; }
+.an-period-btn:hover:not(:disabled) { border-color:var(--red); color:var(--red); }
+.an-period-label { font-family:'Bebas Neue',sans-serif; font-size:1.5rem; letter-spacing:0.08em; color:var(--white); min-width:160px; }
+
+.an-day-bars { display:flex; align-items:flex-end; gap:2px; height:120px; padding-bottom:20px; position:relative; overflow:hidden; }
+.an-bar-col { flex:1; display:flex; flex-direction:column; align-items:center; justify-content:flex-end; height:100%; cursor:default; }
+.an-bar-fill { width:100%; background:rgba(212,43,43,0.5); border-top:1px solid var(--red); transition:background 0.2s; border-radius:1px 1px 0 0; }
+.an-bar-col:hover .an-bar-fill { background:rgba(212,43,43,0.75); }
+.an-bar-lbl { font-size:0.62rem; color:var(--gray); margin-top:4px; line-height:1; min-height:14px; }
+
+.an-svc-list { display:flex; flex-direction:column; gap:0.9rem; padding-top:0.25rem; }
+.an-svc-row { display:flex; flex-direction:column; gap:0.3rem; }
+.an-svc-top { display:flex; justify-content:space-between; align-items:baseline; gap:0.5rem; }
+.an-svc-name { font-size:0.85rem; color:var(--white); font-weight:500; }
+.an-svc-rev { font-family:'Bebas Neue',sans-serif; font-size:1.05rem; color:var(--red); white-space:nowrap; }
+.an-svc-bar-wrap { height:4px; background:var(--border); border-radius:2px; overflow:hidden; }
+.an-svc-bar { height:100%; background:rgba(212,43,43,0.6); border-radius:2px; transition:width 0.4s ease; }
+.an-svc-meta { font-size:0.72rem; color:var(--gray); }
+
+.an-status-list { display:flex; flex-direction:column; gap:0.75rem; padding-top:0.25rem; }
+.an-status-row { display:flex; align-items:center; justify-content:space-between; gap:0.75rem; }
+.an-status-left { display:flex; align-items:center; gap:0.5rem; min-width:100px; }
+.an-status-dot { font-size:0.7rem; line-height:1; }
+.an-status-name { font-size:0.82rem; color:var(--silver); }
+.an-status-right { display:flex; align-items:center; gap:0.6rem; flex:1; justify-content:flex-end; }
+.an-status-bar-wrap { flex:1; max-width:120px; height:4px; background:var(--border); border-radius:2px; overflow:hidden; }
+.an-status-bar { height:100%; border-radius:2px; transition:width 0.4s ease; }
+.an-status-count { font-family:'Bebas Neue',sans-serif; font-size:1.2rem; line-height:1; min-width:24px; text-align:right; }
+
 /* Staff management */
 .staff-card { display:flex; gap:1rem; align-items:flex-start; padding:1rem; border:1px solid var(--border); background:var(--card); margin-bottom:0.5rem; }
 .staff-card-info { flex:1; }
@@ -965,6 +996,10 @@ tr:hover td { background:rgba(212,43,43,0.03); }
   .why-grid { gap:8px; }
   .why-item { padding:1.5rem 1rem; border-radius:8px; }
   .why-title { font-size:0.92rem; }
+
+  /* ── Analytics ── */
+  .an-period-label { font-size:1.2rem; min-width:120px; }
+  .an-day-bars { height:90px; gap:1px; }
 
   /* ── Footer ── */
   footer { padding:2rem 1rem 1.5rem; }

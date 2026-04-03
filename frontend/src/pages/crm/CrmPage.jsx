@@ -5,8 +5,9 @@ import Calendar from './Calendar.jsx';
 import Clients from './Clients.jsx';
 import Staff from './Staff.jsx';
 import Prices from './Prices.jsx';
+import Analytics from './Analytics.jsx';
 
-const PANEL_LABELS = { dash: 'Дашборд', orders: 'Заказы', cal: 'Расписание', clients: 'Клиенты', staff: 'Персонал', prices: 'Прайс-лист' };
+const PANEL_LABELS = { dash: 'Дашборд', orders: 'Заказы', cal: 'Расписание', clients: 'Клиенты', analytics: 'Аналитика', staff: 'Персонал', prices: 'Прайс-лист' };
 
 export default function CrmPage({ panel, onPanelChange, refreshKey, onNewOrder, onOpenChecklist, onBackSite }) {
   const [loadedPanels, setLoadedPanels] = useState(new Set(['dash']));
@@ -37,12 +38,13 @@ export default function CrmPage({ panel, onPanelChange, refreshKey, onNewOrder, 
   }
 
   const navItems = [
-    { id: 'dash',    ico: '📊', label: 'Дашборд' },
-    { id: 'orders',  ico: '📋', label: 'Заказы' },
-    { id: 'cal',     ico: '📅', label: 'Расписание' },
-    { id: 'clients', ico: '👥', label: 'Клиенты' },
-    { id: 'staff',   ico: '🔧', label: 'Персонал' },
-    { id: 'prices',  ico: '💰', label: 'Прайс-лист' },
+    { id: 'dash',      ico: '📊', label: 'Дашборд' },
+    { id: 'orders',    ico: '📋', label: 'Заказы' },
+    { id: 'cal',       ico: '📅', label: 'Расписание' },
+    { id: 'clients',   ico: '👥', label: 'Клиенты' },
+    { id: 'analytics', ico: '📈', label: 'Аналитика' },
+    { id: 'staff',     ico: '🔧', label: 'Персонал' },
+    { id: 'prices',    ico: '💰', label: 'Прайс-лист' },
   ];
 
   return (
@@ -73,14 +75,14 @@ export default function CrmPage({ panel, onPanelChange, refreshKey, onNewOrder, 
           <span className="ico">+</span>Новый заказ
         </button>
         <div className="crm-group-label">Главное</div>
-        {navItems.slice(0, 4).map(item => (
+        {navItems.slice(0, 5).map(item => (
           <button key={item.id} className={`crm-btn ${panel === item.id ? 'active' : ''}`} onClick={() => navigate(item.id)}>
             <span className="ico">{item.ico}</span>{item.label}
           </button>
         ))}
         <div style={{ height: '1px', background: 'var(--border)', margin: '1rem 0' }} />
         <div className="crm-group-label">Настройки</div>
-        {navItems.slice(4).map(item => (
+        {navItems.slice(5).map(item => (
           <button key={item.id} className={`crm-btn ${panel === item.id ? 'active' : ''}`} onClick={() => navigate(item.id)}>
             <span className="ico">{item.ico}</span>{item.label}
           </button>
@@ -111,6 +113,9 @@ export default function CrmPage({ panel, onPanelChange, refreshKey, onNewOrder, 
         </button>
         <button className={`crm-btn ${panel === 'clients' ? 'active' : ''}`} onClick={() => onPanelChange('clients')}>
           <span className="ico">👥</span>Клиенты
+        </button>
+        <button className={`crm-btn ${panel === 'analytics' ? 'active' : ''}`} onClick={() => onPanelChange('analytics')}>
+          <span className="ico">📈</span>Аналитика
         </button>
         <div style={{ height: '1px', background: 'var(--border)', margin: '1rem 0' }} />
         <div className="crm-group-label">Настройки</div>
@@ -163,6 +168,10 @@ export default function CrmPage({ panel, onPanelChange, refreshKey, onNewOrder, 
           {loadedPanels.has('clients') && (
             <Clients isActive={panel === 'clients'} />
           )}
+        </div>
+
+        <div id="p-analytics" className={`crm-panel ${panel === 'analytics' ? 'on' : ''}`}>
+          {loadedPanels.has('analytics') && <Analytics isActive={panel === 'analytics'} />}
         </div>
 
         <div id="p-staff" className={`crm-panel ${panel === 'staff' ? 'on' : ''}`}>

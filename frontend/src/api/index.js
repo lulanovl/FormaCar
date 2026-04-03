@@ -39,6 +39,9 @@ export const deleteStaff   = (id)       => api.delete(`/staff/${id}`);
 // Dashboard
 export const getDashboard = () => api.get('/dashboard');
 
+// Analytics
+export const getAnalytics = (params) => api.get('/analytics' + toQuery(params));
+
 // Checklist
 export const getChecklistItems         = ()          => api.get('/checklist/items');
 export const getOrderChecklist         = (orderId)   => api.get(`/checklist/order/${orderId}`);
