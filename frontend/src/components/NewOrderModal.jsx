@@ -18,6 +18,7 @@ export default function NewOrderModal({ onClose, onSuccess }) {
   const [name, setName] = useState('');
   const [phone, setPhone] = useState('');
   const [car, setCar] = useState('');
+  const [plate, setPlate] = useState('');
   const [serviceId, setServiceId] = useState('');
   const [carTypeId, setCarTypeId] = useState(null);
   const [date, setDate] = useState(todayISO());
@@ -49,6 +50,7 @@ export default function NewOrderModal({ onClose, onSuccess }) {
         client_name: name,
         client_phone: phone,
         client_car: car,
+        plate_number: plate || undefined,
         service_id: Number(serviceId),
         car_type_id: carTypeId,
         date,
@@ -78,6 +80,7 @@ export default function NewOrderModal({ onClose, onSuccess }) {
             <input type="text" placeholder="Имя клиента" value={name} onChange={(e) => setName(e.target.value)} />
             <input type="tel" placeholder="Телефон" value={phone} onChange={(e) => setPhone(e.target.value)} />
             <input type="text" placeholder="Марка и модель авто" value={car} onChange={(e) => setCar(e.target.value)} />
+            <input type="text" placeholder="Гос. номер (необязательно)" value={plate} onChange={(e) => setPlate(e.target.value.toUpperCase())} />
 
             {/* Service */}
             <select value={serviceId} onChange={(e) => setServiceId(e.target.value)}>

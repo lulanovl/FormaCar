@@ -9,8 +9,9 @@ exports.getAll = async (req, res, next) => {
     if (search) {
       query = query.where((builder) => {
         builder
-          .where('name', 'like', `%${search}%`)
-          .orWhere('phone', 'like', `%${search}%`);
+          .where('name',         'like', `%${search}%`)
+          .orWhere('phone',        'like', `%${search}%`)
+          .orWhere('plate_number', 'like', `%${search}%`);
       });
     }
 

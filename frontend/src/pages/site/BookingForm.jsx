@@ -22,6 +22,7 @@ export default function BookingForm({ preSelectService = null }) {
   const [name, setName] = useState('');
   const [phone, setPhone] = useState('+996');
   const [car, setCar] = useState('');
+  const [plate, setPlate] = useState('');
 
   function handlePhoneChange(e) {
     let val = e.target.value;
@@ -132,6 +133,7 @@ export default function BookingForm({ preSelectService = null }) {
         client_name: name,
         client_phone: phone,
         client_car: car,
+        plate_number: plate || undefined,
         service_id: selectedService.id,
         car_type_id: selectedCarType.id,
         date,
@@ -186,6 +188,11 @@ export default function BookingForm({ preSelectService = null }) {
             <div className="form-field">
               <label>Марка и модель</label>
               <input type="text" placeholder="Toyota Camry, BMW X5..." value={car} onChange={e => setCar(e.target.value)} />
+            </div>
+            {/* Plate */}
+            <div className="form-field">
+              <label>Гос. номер <span style={{ fontWeight: 400, opacity: 0.5 }}>(необязательно)</span></label>
+              <input type="text" placeholder="01 KG 123 AB" value={plate} onChange={e => setPlate(e.target.value.toUpperCase())} />
             </div>
             {/* Service */}
             <div className="form-field" ref={svcDropRef} style={{ position: 'relative' }}>

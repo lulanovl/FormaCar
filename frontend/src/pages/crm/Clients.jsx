@@ -64,7 +64,7 @@ export default function Clients({ isActive }) {
         <input
           className="search-input"
           style={{ flex: 1, minWidth: 0, width: 'auto' }}
-          placeholder="Поиск по имени / телефону..."
+          placeholder="Поиск по имени / телефону / номеру машины..."
           value={search}
           onChange={handleSearchChange}
         />
@@ -108,6 +108,9 @@ export default function Clients({ isActive }) {
                   {c.phone}
                 </a>
                 <span className="client-card-car">{c.car || '—'}</span>
+                {c.plate_number && (
+                  <span className="client-card-plate">{c.plate_number}</span>
+                )}
               </div>
 
               <div className="client-card-footer">

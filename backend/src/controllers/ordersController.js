@@ -7,18 +7,25 @@ function generateOrderNumber(count) {
   return `#${1000 + count + 1}`;
 }
 
-async function upsertClient(trx, { client_name, client_phone, client_car, date }) {
+async function upsertClient(trx, { client_name, client_phone, client_car, plate_number, date }) {
   const existing = await trx('clients').where({ phone: client_phone }).first();
   if (existing) {
-    await trx('clients').where({ phone: client_phone }).update({
+    const upd = {
       name:         client_name,
       car:          client_car,
       total_visits: existing.total_visits + 1,
       last_visit:   date,
       updated_at:   new Date().toISOString(),
-    });
+    };
+    // Only overwrite plate_number if a new one is provided
+    if (plate_number) upd.plate_number = plate_number;
+    await trx('clients').where({ phone: client_phone }).update(upd);
   } else {
-    await trx('clients').insert({ name: client_name, phone: client_phone, car: client_car, total_visits: 1, last_visit: date });
+    await trx('clients').insert({
+      name: client_name, phone: client_phone, car: client_car,
+      plate_number: plate_number || null,
+      total_visits: 1, last_visit: date,
+    });
   }
 }
 
@@ -40,6 +47,7 @@ exports.create = async (req, res, next) => {
       client_name, client_phone, client_car,
       service_id, car_type_id,
       date, time_slot, note,
+      plate_number = '',
       additional_service_ids = [],
     } = req.body;
 
@@ -87,9 +95,10 @@ exports.create = async (req, res, next) => {
           extras_price,
           additional_service_ids: JSON.stringify(additional_service_ids),
           note: note || '',
+          plate_number: plate_number || null,
         });
 
-        await upsertClient(trx, { client_name, client_phone, client_car, date });
+        await upsertClient(trx, { client_name, client_phone, client_car, plate_number, date });
         return trx('orders').where({ id }).first();
       });
     } catch (err) {
@@ -122,6 +131,7 @@ exports.createAdmin = async (req, res, next) => {
       client_name, client_phone, client_car,
       service_id, car_type_id,
       date, time_slot, note, staff_id,
+      plate_number = '',
       additional_service_ids = [],
     } = req.body;
 
@@ -168,9 +178,10 @@ exports.createAdmin = async (req, res, next) => {
           additional_service_ids: JSON.stringify(additional_service_ids),
           note: note || '',
           staff_id: staff_id || null,
+          plate_number: plate_number || null,
         });
 
-        await upsertClient(trx, { client_name, client_phone, client_car, date });
+        await upsertClient(trx, { client_name, client_phone, client_car, plate_number, date });
         return trx('orders').where({ id }).first();
       });
     } catch (err) {
@@ -259,6 +270,32 @@ exports.updatePrice = async (req, res, next) => {
       await db('orders').where({ id }).update({ final_price: val, updated_at: new Date().toISOString() });
     } else {
       await db('orders').where({ id }).update({ final_price: null, updated_at: new Date().toISOString() });
+    }
+
+    const updated = await db('orders').where({ id }).first();
+    res.json(updated);
+  } catch (err) {
+    next(err);
+  }
+};
+
+// Admin — добавить/обновить номер машины
+exports.updatePlate = async (req, res, next) => {
+  try {
+    const { id } = req.params;
+    const { plate_number } = req.body;
+
+    const order = await db('orders').where({ id }).first();
+    if (!order) return res.status(404).json({ error: 'Заказ не найден' });
+
+    const plate = plate_number ? plate_number.trim().toUpperCase() : null;
+    await db('orders').where({ id }).update({ plate_number: plate, updated_at: new Date().toISOString() });
+
+    // Sync to client record
+    if (plate) {
+      await db('clients')
+        .where({ phone: order.client_phone })
+        .update({ plate_number: plate, updated_at: new Date().toISOString() });
     }
 
     const updated = await db('orders').where({ id }).first();

@@ -839,6 +839,7 @@ tr:hover td { background:rgba(212,43,43,0.03); }
 }
 .client-card-phone:hover { background:rgba(37,211,102,0.15); }
 .client-card-car { font-size:0.8rem; color:var(--gray); }
+.client-card-plate { font-family:monospace; font-size:0.75rem; color:var(--silver); background:rgba(255,255,255,0.06); border:1px solid var(--border); padding:1px 6px; border-radius:2px; letter-spacing:0.1em; }
 .client-card-footer { padding:0 1rem 0.8rem; }
 
 /* Client history list (in modal) */

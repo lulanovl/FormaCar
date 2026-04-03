@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef } from 'react';
-import { getOrders, updateOrderStatus, updateOrderPrice } from '../../api/index.js';
+import { getOrders, updateOrderStatus, updateOrderPrice, updateOrderPlate } from '../../api/index.js';
 import { formatDate, STATUS_LABEL, STATUS_BADGE } from '../../utils/format.js';
 import { toastSuccess, toastError } from '../../components/toast.js';
 
@@ -23,7 +23,7 @@ function toWA(phone) {
   return `https://wa.me/${phone.replace(/\D/g, '')}`;
 }
 
-function OrderCard({ o, onAction, onUpdatePrice, isOpen, onToggle, highlighted }) {
+function OrderCard({ o, onAction, onUpdatePrice, onUpdatePlate, isOpen, onToggle, highlighted }) {
   const calculated = (o.price_snapshot || 0) + (o.extras_price || 0);
   const total = o.final_price != null ? o.final_price : calculated;
   const hasDiscount = o.final_price != null && o.final_price !== calculated;
@@ -56,6 +56,29 @@ function OrderCard({ o, onAction, onUpdatePrice, isOpen, onToggle, highlighted }
     setSavingPrice(true);
     await onUpdatePrice(o.id, null);
     setSavingPrice(false);
+  }
+
+  const [editingPlate, setEditingPlate] = useState(false);
+  const [plateInput, setPlateInput] = useState('');
+  const [savingPlate, setSavingPlate] = useState(false);
+
+  function startEditPlate(e) {
+    e.stopPropagation();
+    setPlateInput(o.plate_number || '');
+    setEditingPlate(true);
+  }
+
+  async function savePlate(e) {
+    e.stopPropagation();
+    setSavingPlate(true);
+    await onUpdatePlate(o.id, plateInput);
+    setSavingPlate(false);
+    setEditingPlate(false);
+  }
+
+  function cancelEditPlate(e) {
+    e.stopPropagation();
+    setEditingPlate(false);
   }
 
   return (
@@ -156,6 +179,28 @@ function OrderCard({ o, onAction, onUpdatePrice, isOpen, onToggle, highlighted }
               )}
             </div>
             {o.note && <div className="ocd-item ocd-item-full"><span className="ocd-label">Комментарий</span><span className="ocd-val">{o.note}</span></div>}
+            <div className="ocd-item">
+              <span className="ocd-label">Гос. номер</span>
+              {editingPlate ? (
+                <span className="ocd-price-edit" onClick={e => e.stopPropagation()}>
+                  <input
+                    className="ocd-price-input"
+                    style={{ width: '120px', fontSize: '0.85rem', fontFamily: 'inherit', letterSpacing: '0.1em' }}
+                    type="text"
+                    value={plateInput}
+                    onChange={e => setPlateInput(e.target.value.toUpperCase())}
+                    autoFocus
+                  />
+                  <button className="ocd-price-btn ocd-price-save" onClick={savePlate} disabled={savingPlate}>✓</button>
+                  <button className="ocd-price-btn ocd-price-cancel" onClick={cancelEditPlate}>✕</button>
+                </span>
+              ) : (
+                <span className="ocd-val" style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
+                  <span style={{ fontFamily: 'monospace', letterSpacing: '0.1em' }}>{o.plate_number || '—'}</span>
+                  <button className="ocd-edit-price-btn" onClick={startEditPlate} title="Добавить / изменить номер">✎</button>
+                </span>
+              )}
+            </div>
           </div>
         </div>
       )}
@@ -228,6 +273,16 @@ export default function Orders({ isActive, refreshKey, onNewOrder, onOpenCheckli
     }
   }
 
+  async function handleUpdatePlate(orderId, plate_number) {
+    try {
+      await updateOrderPlate(orderId, plate_number || null);
+      toastSuccess(plate_number ? 'Номер сохранён' : 'Номер удалён');
+      loadOrders();
+    } catch (err) {
+      toastError(err.message);
+    }
+  }
+
   async function handleUpdatePrice(orderId, final_price) {
     try {
       await updateOrderPrice(orderId, final_price === null ? null : parseInt(final_price));
@@ -283,6 +338,7 @@ export default function Orders({ isActive, refreshKey, onNewOrder, onOpenCheckli
               o={o}
               onAction={handleAction}
               onUpdatePrice={handleUpdatePrice}
+              onUpdatePlate={handleUpdatePlate}
               isOpen={expandedId === o.id}
               onToggle={() => setExpandedId(prev => prev === o.id ? null : o.id)}
               highlighted={highlightedId === o.id}
