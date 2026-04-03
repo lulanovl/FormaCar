@@ -23,11 +23,11 @@ function toWA(phone) {
   return `https://wa.me/${phone.replace(/\D/g, '')}`;
 }
 
-function OrderCard({ o, onAction, isOpen, onToggle }) {
+function OrderCard({ o, onAction, isOpen, onToggle, highlighted }) {
   const total = (o.price_snapshot || 0) + (o.extras_price || 0);
 
   return (
-    <div className={`ocard ${isOpen ? 'ocard-open' : ''} ocard-${o.status}`}>
+    <div id={`ocard-${o.id}`} className={`ocard ${isOpen ? 'ocard-open' : ''} ocard-${o.status}${highlighted ? ' ocard-highlighted' : ''}`}>
       {/* Top row: number + status + date/time */}
       <div className="ocard-header" onClick={onToggle}>
         <div className="ocard-header-left">
@@ -100,19 +100,33 @@ function OrderCard({ o, onAction, isOpen, onToggle }) {
   );
 }
 
-export default function Orders({ isActive, refreshKey, onNewOrder, onOpenChecklist, initialFilter }) {
+export default function Orders({ isActive, refreshKey, onNewOrder, onOpenChecklist, initialFilter, initialOrderId }) {
   const [filter, setFilter] = useState(initialFilter || 'all');
   const [search, setSearch] = useState('');
   const [orders, setOrders] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [expandedId, setExpandedId] = useState(null);
+  const [highlightedId, setHighlightedId] = useState(null);
   const searchTimer = useRef(null);
 
   // Apply initialFilter when it changes from outside (Dashboard navigation)
   useEffect(() => {
     if (initialFilter) setFilter(initialFilter);
   }, [initialFilter]);
+
+  // Scroll to and highlight a specific order (from Calendar navigation)
+  useEffect(() => {
+    if (!initialOrderId || loading) return;
+    setExpandedId(initialOrderId);
+    setHighlightedId(initialOrderId);
+    setTimeout(() => {
+      document.getElementById(`ocard-${initialOrderId}`)?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    }, 150);
+    // Remove highlight after 2s
+    const t = setTimeout(() => setHighlightedId(null), 2500);
+    return () => clearTimeout(t);
+  }, [initialOrderId, loading]);
 
   useEffect(() => {
     loadOrders();
@@ -197,6 +211,7 @@ export default function Orders({ isActive, refreshKey, onNewOrder, onOpenCheckli
               onAction={handleAction}
               isOpen={expandedId === o.id}
               onToggle={() => setExpandedId(prev => prev === o.id ? null : o.id)}
+              highlighted={highlightedId === o.id}
             />
           ))}
         </div>

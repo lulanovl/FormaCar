@@ -12,9 +12,17 @@ export default function CrmPage({ panel, onPanelChange, refreshKey, onNewOrder, 
   const [loadedPanels, setLoadedPanels] = useState(new Set(['dash']));
   const [drawerOpen, setDrawerOpen] = useState(false);
   const [ordersFilter, setOrdersFilter] = useState('all');
+  const [ordersInitialId, setOrdersInitialId] = useState(null);
 
-  function handleNavigate(panelId, filter) {
-    if (filter) setOrdersFilter(filter);
+  function handleNavigate(panelId, payload) {
+    if (typeof payload === 'number') {
+      // Navigate to a specific order by id
+      setOrdersFilter('all');
+      setOrdersInitialId(payload);
+    } else if (typeof payload === 'string') {
+      setOrdersFilter(payload);
+      setOrdersInitialId(null);
+    }
     onPanelChange(panelId);
     setDrawerOpen(false);
   }
@@ -140,13 +148,14 @@ export default function CrmPage({ panel, onPanelChange, refreshKey, onNewOrder, 
               onNewOrder={onNewOrder}
               onOpenChecklist={onOpenChecklist}
               initialFilter={ordersFilter}
+              initialOrderId={ordersInitialId}
             />
           )}
         </div>
 
         <div id="p-cal" className={`crm-panel ${panel === 'cal' ? 'on' : ''}`}>
           {loadedPanels.has('cal') && (
-            <Calendar isActive={panel === 'cal'} refreshKey={refreshKey} />
+            <Calendar isActive={panel === 'cal'} refreshKey={refreshKey} onNavigate={handleNavigate} />
           )}
         </div>
 

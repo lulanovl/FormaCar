@@ -413,6 +413,7 @@ footer { background:var(--dark); border-top:1px solid var(--border-light); paddi
 .bar-fill { width:100%; background:var(--border); position:relative; min-height:3px; transition:background 0.3s; cursor:pointer; border-top:1px solid transparent; }
 .bar-fill:hover { background:rgba(212,43,43,0.4); border-top-color:var(--red); }
 .bar-fill.today { background:rgba(212,43,43,0.7); border-top:2px solid var(--red); }
+.bar-fill.bar-selected { background:rgba(212,43,43,0.5); border-top:2px solid var(--red); }
 .bar-lbl { font-family:'Rajdhani',sans-serif; font-size:0.6rem; color:var(--gray); }
 
 /* Staff widget */
@@ -506,6 +507,29 @@ tr:hover td { background:rgba(212,43,43,0.03); }
 .from-price-badge { font-family:'Rajdhani',sans-serif; font-size:0.6rem; color:var(--gray); letter-spacing:0.1em; }
 .btn-save-price { font-family:'Rajdhani',sans-serif; font-size:0.65rem; font-weight:700; letter-spacing:0.12em; text-transform:uppercase; background:var(--red); color:var(--white); border:none; padding:0.6rem 1.5rem; cursor:pointer; transition:background 0.2s; margin-top:1.2rem; }
 .btn-save-price:hover { background:var(--red-dark); }
+
+/* ─── PRICES MOBILE ─── */
+.price-mobile-view { display:none; }
+.price-car-tabs { display:flex; gap:4px; flex-wrap:wrap; margin-bottom:1rem; }
+.price-car-tab {
+  font-family:'Rajdhani',sans-serif; font-size:0.75rem; font-weight:700; letter-spacing:0.1em;
+  text-transform:uppercase; border:1px solid var(--border); color:var(--gray);
+  background:none; padding:0.45rem 0.9rem; cursor:pointer; transition:all 0.2s;
+  display:flex; align-items:center; gap:0.4rem;
+}
+.price-car-tab.on, .price-car-tab:hover { border-color:var(--red); color:var(--red); background:rgba(230,0,0,0.06); }
+.price-svc-list { display:flex; flex-direction:column; gap:8px; margin-bottom:1rem; }
+.price-svc-card {
+  background:#0c0c0c; border:1px solid var(--border); border-radius:4px;
+  padding:0.9rem 1rem;
+}
+.price-svc-card-top { display:flex; align-items:flex-start; justify-content:space-between; gap:1rem; margin-bottom:0.7rem; }
+.price-svc-card-name { font-size:0.9rem; font-weight:600; color:var(--white); margin-bottom:0.15rem; }
+.price-svc-card-meta { font-size:0.72rem; color:var(--gray); }
+.price-svc-card-right { display:flex; align-items:center; gap:0.5rem; flex-shrink:0; }
+.price-active-label { display:flex; align-items:center; gap:0.4rem; cursor:pointer; font-family:'Rajdhani',sans-serif; font-size:0.65rem; color:var(--gray); letter-spacing:0.1em; text-transform:uppercase; }
+.price-svc-card-price-row { display:flex; align-items:center; gap:0.6rem; }
+.price-svc-card-currency { font-family:'Rajdhani',sans-serif; font-size:0.72rem; color:var(--gray); flex-shrink:0; }
 
 /* Staff management */
 .staff-card { display:flex; gap:1rem; align-items:flex-start; padding:1rem; border:1px solid var(--border); background:var(--card); margin-bottom:0.5rem; }
@@ -737,6 +761,60 @@ tr:hover td { background:rgba(212,43,43,0.03); }
   box-shadow: 0 0 10px var(--red-glow);
 }
 
+/* ─── CLIENT CARDS ─── */
+.client-card {
+  background:var(--glass-bg);
+  border:1px solid var(--border-light);
+  border-left:3px solid #64b5f6;
+  border-radius:8px;
+  overflow:hidden;
+  cursor:pointer;
+  transition:border-color 0.2s, box-shadow 0.2s;
+  padding:0;
+}
+.client-card:hover { border-color:rgba(100,181,246,0.4); box-shadow:0 4px 20px rgba(0,0,0,0.3); }
+.client-card-header {
+  display:flex; align-items:center; justify-content:space-between; gap:0.5rem;
+  padding:0.7rem 1rem 0;
+}
+.client-card-header-left { display:flex; align-items:center; gap:0.5rem; flex:1; min-width:0; }
+.client-card-name { font-size:0.95rem; font-weight:600; color:var(--white); white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+.client-card-date { font-size:0.73rem; color:var(--gray); flex-shrink:0; white-space:nowrap; }
+.client-card-body {
+  display:flex; align-items:center; gap:1rem; flex-wrap:wrap;
+  padding:0.45rem 1rem 0.5rem;
+}
+.client-card-phone {
+  display:inline-flex; align-items:center; gap:0.3rem;
+  font-size:0.8rem; color:#25d366; text-decoration:none;
+  background:rgba(37,211,102,0.08); border:1px solid rgba(37,211,102,0.2);
+  padding:0.25rem 0.6rem; border-radius:20px;
+  transition:background 0.2s; flex-shrink:0;
+}
+.client-card-phone:hover { background:rgba(37,211,102,0.15); }
+.client-card-car { font-size:0.8rem; color:var(--gray); }
+.client-card-footer { padding:0 1rem 0.8rem; }
+
+/* Client history list (in modal) */
+.client-history-list { display:flex; flex-direction:column; gap:0.5rem; }
+.client-history-item { padding:0.7rem 0.8rem; background:#0c0c0c; border:1px solid var(--border); border-radius:4px; }
+.client-history-top { display:flex; align-items:center; justify-content:space-between; gap:0.5rem; margin-bottom:0.3rem; }
+.client-history-bot { display:flex; align-items:center; justify-content:space-between; gap:0.5rem; }
+
+/* ─── CALENDAR TOPBAR ─── */
+.cal-topbar { display:flex; flex-direction:column; gap:0.8rem; }
+.cal-topbar-label { font-family:'Bebas Neue',sans-serif; font-size:1.1rem; letter-spacing:0.06em; color:var(--white); }
+
+/* Clickable slot order card */
+.slot-order-card-link { cursor:pointer; transition:border-color 0.2s, background 0.2s; }
+.slot-order-card-link:hover { border-color:rgba(230,0,0,0.4); background:rgba(230,0,0,0.06); }
+.slot-order-hint { font-size:0.65rem; color:var(--gray); margin-top:0.25rem; letter-spacing:0.05em; opacity:0; transition:opacity 0.2s; }
+.slot-order-card-link:hover .slot-order-hint { opacity:1; }
+
+/* Highlighted order card (navigated from Calendar) */
+.ocard-highlighted { box-shadow:0 0 0 2px var(--red), 0 4px 24px rgba(230,0,0,0.2) !important; animation:highlightPulse 0.5s ease; }
+@keyframes highlightPulse { 0%,100% { box-shadow:0 0 0 2px var(--red); } 50% { box-shadow:0 0 0 4px var(--red), 0 0 30px rgba(230,0,0,0.3); } }
+
 /* ─── LOADING ─── */
 .loading { display:flex; align-items:center; justify-content:center; padding:3rem; color:var(--gray); font-family:'Rajdhani',sans-serif; font-size:0.8rem; letter-spacing:0.2em; text-transform:uppercase; }
 .loading::after { content:''; width:16px; height:16px; border:2px solid var(--border); border-top-color:var(--red); border-radius:50%; animation:spin 0.8s linear infinite; margin-left:0.8rem; }
@@ -787,6 +865,13 @@ tr:hover td { background:rgba(212,43,43,0.03); }
   .add-form .form-field { min-width:unset; width:100%; }
 }
 
+@media (max-width:760px) {
+  /* Prices: switch to mobile card view */
+  .price-desktop-table { display:none !important; }
+  .price-mobile-view { display:block; }
+  .price-svc-list.price-mobile-view { display:flex; }
+}
+
 @media (max-width:600px) {
   /* ── Nav ── */
   nav { padding:0 1rem; height:56px; }
@@ -809,16 +894,16 @@ tr:hover td { background:rgba(212,43,43,0.03); }
     flex:1;
     display:flex;
     flex-direction:column;
-    justify-content:center;
-    padding:1.5rem 1rem 1.2rem;
+    justify-content:flex-start;
+    padding:2.8rem 1.2rem 1.5rem;
     max-width:100%;
   }
-  .hero-eyebrow { font-size:0.65rem; margin-bottom:0.8rem; }
-  .hero h1 { font-size:clamp(2.6rem, 13vw, 3.4rem); margin-bottom:1rem; }
-  .hero-sub { font-size:0.85rem; margin-bottom:1.6rem; max-width:100%; }
-  .hero-actions { flex-direction:column; gap:0.75rem; }
+  .hero-eyebrow { font-size:0.65rem; margin-bottom:1.6rem; }
+  .hero h1 { font-size:clamp(2.6rem, 13vw, 3.4rem); margin-bottom:2rem; }
+  .hero-sub { font-size:0.88rem; margin-bottom:2.4rem; max-width:100%; line-height:1.75; }
+  .hero-actions { flex-direction:column; gap:0.9rem; }
   .hero-actions .btn-primary,
-  .hero-actions .btn-ghost { width:100%; text-align:center; padding:0.9rem 1rem; clip-path:none; }
+  .hero-actions .btn-ghost { width:100%; text-align:center; padding:1rem 1rem; clip-path:none; }
   /* Stats bar: remove absolute, become natural flex item at bottom */
   .stats-bar {
     position:static;

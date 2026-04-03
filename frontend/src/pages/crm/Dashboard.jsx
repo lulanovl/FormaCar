@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { getDashboard, updateStaff, updateOrderStatus } from '../../api/index.js';
+import { getDashboard, updateStaff, updateOrderStatus, getOrders } from '../../api/index.js';
 import { formatDate, STATUS_LABEL, STATUS_BADGE, STAFF_STATUS_LABEL, STAFF_STATUS_COLOR } from '../../utils/format.js';
 import { toastSuccess, toastError } from '../../components/toast.js';
 
@@ -7,6 +7,11 @@ export default function Dashboard({ isActive, refreshKey, onNewOrder, onOpenChec
   const [data, setData] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+
+  // Selected day in the week chart (null = today)
+  const [selectedChartDate, setSelectedChartDate] = useState(null);
+  const [chartDayOrders, setChartDayOrders] = useState(null);
+  const [chartDayLoading, setChartDayLoading] = useState(false);
 
   useEffect(() => {
     load();
@@ -18,10 +23,30 @@ export default function Dashboard({ isActive, refreshKey, onNewOrder, onOpenChec
     try {
       const d = await getDashboard();
       setData(d);
+      setSelectedChartDate(null);
+      setChartDayOrders(null);
     } catch (err) {
       setError(err.message);
     } finally {
       setLoading(false);
+    }
+  }
+
+  async function handleBarClick(d) {
+    if (d.isToday) {
+      setSelectedChartDate(null);
+      setChartDayOrders(null);
+      return;
+    }
+    setSelectedChartDate(d.date);
+    setChartDayLoading(true);
+    try {
+      const all = await getOrders({});
+      setChartDayOrders(all.filter(o => o.date === d.date));
+    } catch {
+      setChartDayOrders([]);
+    } finally {
+      setChartDayLoading(false);
     }
   }
 
@@ -59,6 +84,10 @@ export default function Dashboard({ isActive, refreshKey, onNewOrder, onOpenChec
 
   const maxCount = Math.max(...data.week_chart.map(d => d.count), 1);
   const todayDate = new Date().toLocaleDateString('ru-RU', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' });
+  const displayOrders = chartDayOrders ?? data.today_orders;
+  const selectedDayLabel = selectedChartDate
+    ? new Date(selectedChartDate + 'T00:00:00').toLocaleDateString('ru-RU', { weekday: 'long', day: 'numeric', month: 'long' })
+    : 'сегодня';
 
   return (
     <>
@@ -101,18 +130,19 @@ export default function Dashboard({ isActive, refreshKey, onNewOrder, onOpenChec
 
       <div className="chart-row">
         <div className="crm-box">
-          <div className="crm-box-title">Заказы · эта неделя</div>
+          <div className="crm-box-title">Заказы · эта неделя · <span style={{ color: 'var(--silver)' }}>нажмите на день</span></div>
           <div className="bars">
             {data.week_chart.map((d, i) => {
               const pct = Math.round((d.count / maxCount) * 100);
+              const isSelected = selectedChartDate === d.date || (!selectedChartDate && d.isToday);
               return (
-                <div key={i} className="bar-col">
+                <div key={i} className="bar-col" onClick={() => handleBarClick(d)} style={{ cursor: 'pointer' }}>
                   <div
-                    className={`bar-fill ${d.isToday ? 'today' : ''}`}
+                    className={`bar-fill ${d.isToday ? 'today' : ''} ${isSelected ? 'bar-selected' : ''}`}
                     style={{ height: `${Math.max(pct, 3)}%` }}
-                    title={`${d.count} заказов`}
+                    title={`${d.label}: ${d.count} заказ${d.count === 1 ? '' : d.count >= 2 && d.count <= 4 ? 'а' : 'ов'}`}
                   />
-                  <div className="bar-lbl" style={d.isToday ? { color: 'var(--red)' } : {}}>
+                  <div className="bar-lbl" style={isSelected ? { color: 'var(--red)' } : {}}>
                     {d.label}
                   </div>
                 </div>
@@ -145,16 +175,29 @@ export default function Dashboard({ isActive, refreshKey, onNewOrder, onOpenChec
 
       <div className="crm-table-wrap">
         <div className="crm-table-header">
-          <div className="crm-table-title">Заказы сегодня</div>
+          <div className="crm-table-title">
+            Заказы · {selectedDayLabel}
+            {chartDayLoading && <span style={{ fontSize: '0.7rem', color: 'var(--gray)', marginLeft: '0.5rem' }}>загрузка...</span>}
+          </div>
+          {selectedChartDate && (
+            <button
+              className="f-btn"
+              onClick={() => { setSelectedChartDate(null); setChartDayOrders(null); }}
+            >
+              ✕ Сброс
+            </button>
+          )}
         </div>
         <table>
           <thead>
             <tr><th>#</th><th>Клиент</th><th>Авто</th><th>Услуга</th><th>Тип</th><th>Время</th><th>Статус</th><th>Действия</th></tr>
           </thead>
           <tbody>
-            {data.today_orders.length === 0 ? (
-              <tr><td colSpan={8} style={{ textAlign: 'center', color: 'var(--gray)', padding: '2rem' }}>Заказов сегодня нет</td></tr>
-            ) : data.today_orders.map(o => (
+            {chartDayLoading ? (
+              <tr><td colSpan={8} style={{ textAlign: 'center', color: 'var(--gray)', padding: '2rem' }}>Загрузка...</td></tr>
+            ) : displayOrders.length === 0 ? (
+              <tr><td colSpan={8} style={{ textAlign: 'center', color: 'var(--gray)', padding: '2rem' }}>Заказов нет</td></tr>
+            ) : displayOrders.map(o => (
               <tr key={o.id}>
                 <td className="td-num">{o.order_number}</td>
                 <td>{o.client_name}</td>
