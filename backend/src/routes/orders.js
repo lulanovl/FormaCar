@@ -8,5 +8,6 @@ router.post('/admin', auth, ctrl.createAdmin);      // Admin — создать 
 router.get('/', auth, ctrl.getAll);
 router.get('/:id', auth, ctrl.getOne);
 router.patch('/:id/status', auth, ctrl.updateStatus);
+router.patch('/:id/price',  auth, ctrl.updatePrice);
 
 module.exports = router;

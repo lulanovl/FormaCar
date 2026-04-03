@@ -2,6 +2,11 @@ const db = require('../db/knex');
 
 const MONTH_NAMES_RU = ['Январь','Февраль','Март','Апрель','Май','Июнь','Июль','Август','Сентябрь','Октябрь','Ноябрь','Декабрь'];
 
+// Effective revenue for a single order: final_price overrides calculated price
+function effectiveRevenue(o) {
+  return o.final_price != null ? o.final_price : (o.price_snapshot || 0) + (o.extras_price || 0);
+}
+
 exports.getData = async (req, res, next) => {
   try {
     const now   = new Date();
@@ -16,13 +21,13 @@ exports.getData = async (req, res, next) => {
     // All orders in the selected month
     const orders = await db('orders')
       .where('date', 'like', `${prefix}%`)
-      .select('id', 'date', 'status', 'service_name', 'price_snapshot', 'extras_price');
+      .select('id', 'date', 'status', 'service_name', 'price_snapshot', 'extras_price', 'final_price');
 
     const doneOrders = orders.filter(o => o.status === 'done');
 
     const total_orders  = orders.length;
     const done_orders   = doneOrders.length;
-    const total_revenue = doneOrders.reduce((s, o) => s + (o.price_snapshot || 0) + (o.extras_price || 0), 0);
+    const total_revenue = doneOrders.reduce((s, o) => s + effectiveRevenue(o), 0);
     const avg_check     = done_orders > 0 ? Math.round(total_revenue / done_orders) : 0;
     const conversion    = total_orders > 0 ? Math.round((done_orders / total_orders) * 100) : 0;
 
@@ -37,7 +42,7 @@ exports.getData = async (req, res, next) => {
       if (!dailyMap[o.date]) return;
       dailyMap[o.date].count++;
       if (o.status === 'done') {
-        dailyMap[o.date].revenue += (o.price_snapshot || 0) + (o.extras_price || 0);
+        dailyMap[o.date].revenue += effectiveRevenue(o);
       }
     });
     const daily_revenue = Object.values(dailyMap);
@@ -49,7 +54,7 @@ exports.getData = async (req, res, next) => {
       if (!svcMap[name]) svcMap[name] = { service_name: name, count: 0, revenue: 0 };
       svcMap[name].count++;
       if (o.status === 'done') {
-        svcMap[name].revenue += (o.price_snapshot || 0) + (o.extras_price || 0);
+        svcMap[name].revenue += effectiveRevenue(o);
       }
     });
     const by_service = Object.values(svcMap).sort((a, b) => b.revenue - a.revenue);

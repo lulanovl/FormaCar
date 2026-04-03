@@ -25,6 +25,7 @@ export const createOrderAdmin = (data)    => api.post('/orders/admin', data);
 export const getOrders        = (params)  => api.get('/orders' + toQuery(params));
 export const getOrder         = (id)      => api.get(`/orders/${id}`);
 export const updateOrderStatus = (id, status) => api.patch(`/orders/${id}/status`, { status });
+export const updateOrderPrice  = (id, final_price) => api.patch(`/orders/${id}/price`, { final_price });
 
 // Clients
 export const getClients = (params) => api.get('/clients' + toQuery(params));

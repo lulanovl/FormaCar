@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef } from 'react';
-import { getOrders, updateOrderStatus } from '../../api/index.js';
+import { getOrders, updateOrderStatus, updateOrderPrice } from '../../api/index.js';
 import { formatDate, STATUS_LABEL, STATUS_BADGE } from '../../utils/format.js';
 import { toastSuccess, toastError } from '../../components/toast.js';
 
@@ -23,8 +23,40 @@ function toWA(phone) {
   return `https://wa.me/${phone.replace(/\D/g, '')}`;
 }
 
-function OrderCard({ o, onAction, isOpen, onToggle, highlighted }) {
-  const total = (o.price_snapshot || 0) + (o.extras_price || 0);
+function OrderCard({ o, onAction, onUpdatePrice, isOpen, onToggle, highlighted }) {
+  const calculated = (o.price_snapshot || 0) + (o.extras_price || 0);
+  const total = o.final_price != null ? o.final_price : calculated;
+  const hasDiscount = o.final_price != null && o.final_price !== calculated;
+
+  const [editingPrice, setEditingPrice] = useState(false);
+  const [priceInput, setPriceInput] = useState('');
+  const [savingPrice, setSavingPrice] = useState(false);
+
+  function startEdit(e) {
+    e.stopPropagation();
+    setPriceInput(String(total));
+    setEditingPrice(true);
+  }
+
+  async function savePrice(e) {
+    e.stopPropagation();
+    setSavingPrice(true);
+    await onUpdatePrice(o.id, priceInput);
+    setSavingPrice(false);
+    setEditingPrice(false);
+  }
+
+  function cancelEdit(e) {
+    e.stopPropagation();
+    setEditingPrice(false);
+  }
+
+  async function resetPrice(e) {
+    e.stopPropagation();
+    setSavingPrice(true);
+    await onUpdatePrice(o.id, null);
+    setSavingPrice(false);
+  }
 
   return (
     <div id={`ocard-${o.id}`} className={`ocard ${isOpen ? 'ocard-open' : ''} ocard-${o.status}${highlighted ? ' ocard-highlighted' : ''}`} onClick={onToggle} style={{ cursor: 'pointer' }}>
@@ -91,7 +123,38 @@ function OrderCard({ o, onAction, isOpen, onToggle, highlighted }) {
           <div className="ocd-grid">
             <div className="ocd-item"><span className="ocd-label">Услуга</span><span className="ocd-val">{o.service_name}</span></div>
             <div className="ocd-item"><span className="ocd-label">Тип кузова</span><span className="ocd-val">{o.car_type_name || '—'}</span></div>
-            <div className="ocd-item"><span className="ocd-label">Сумма</span><span className="ocd-val ocd-price">{total ? total.toLocaleString('ru-RU') + ' сом' : '—'}</span></div>
+            <div className="ocd-item">
+              <span className="ocd-label">
+                Сумма
+                {hasDiscount && <span className="ocd-discount-tag">скидка</span>}
+              </span>
+              {editingPrice ? (
+                <span className="ocd-price-edit" onClick={e => e.stopPropagation()}>
+                  <input
+                    className="ocd-price-input"
+                    type="number"
+                    min="0"
+                    value={priceInput}
+                    onChange={e => setPriceInput(e.target.value)}
+                    autoFocus
+                  />
+                  <span className="ocd-price-unit">сом</span>
+                  <button className="ocd-price-btn ocd-price-save" onClick={savePrice} disabled={savingPrice}>✓</button>
+                  <button className="ocd-price-btn ocd-price-cancel" onClick={cancelEdit}>✕</button>
+                </span>
+              ) : (
+                <span className="ocd-val ocd-price">
+                  {total ? total.toLocaleString('ru-RU') + ' сом' : '—'}
+                  {hasDiscount && calculated > 0 && (
+                    <span className="ocd-original-price">{calculated.toLocaleString('ru-RU')} сом</span>
+                  )}
+                  <button className="ocd-edit-price-btn" onClick={startEdit} title="Изменить сумму">✎</button>
+                  {hasDiscount && (
+                    <button className="ocd-reset-price-btn" onClick={resetPrice} title="Сбросить к расчётной сумме" disabled={savingPrice}>↩</button>
+                  )}
+                </span>
+              )}
+            </div>
             {o.note && <div className="ocd-item ocd-item-full"><span className="ocd-label">Комментарий</span><span className="ocd-val">{o.note}</span></div>}
           </div>
         </div>
@@ -165,6 +228,16 @@ export default function Orders({ isActive, refreshKey, onNewOrder, onOpenCheckli
     }
   }
 
+  async function handleUpdatePrice(orderId, final_price) {
+    try {
+      await updateOrderPrice(orderId, final_price === null ? null : parseInt(final_price));
+      toastSuccess(final_price === null ? 'Сумма сброшена' : 'Сумма обновлена');
+      loadOrders();
+    } catch (err) {
+      toastError(err.message);
+    }
+  }
+
   return (
     <>
       <div className="crm-page-title">
@@ -209,6 +282,7 @@ export default function Orders({ isActive, refreshKey, onNewOrder, onOpenCheckli
               key={o.id}
               o={o}
               onAction={handleAction}
+              onUpdatePrice={handleUpdatePrice}
               isOpen={expandedId === o.id}
               onToggle={() => setExpandedId(prev => prev === o.id ? null : o.id)}
               highlighted={highlightedId === o.id}

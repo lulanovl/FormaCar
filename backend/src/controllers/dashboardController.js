@@ -29,7 +29,7 @@ exports.getData = async (req, res, next) => {
     const [totalClientsRow] = await db('clients').count('id as cnt');
     const [revenueRow] = await db('orders')
       .where({ date: today, status: 'done' })
-      .select(db.raw('SUM(COALESCE(price_snapshot, 0) + COALESCE(extras_price, 0)) as total'));
+      .select(db.raw('SUM(CASE WHEN final_price IS NOT NULL THEN final_price ELSE COALESCE(price_snapshot, 0) + COALESCE(extras_price, 0) END) as total'));
 
     // График недели
     const weekOrdersRaw = await db('orders')

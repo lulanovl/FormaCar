@@ -241,6 +241,33 @@ exports.getOne = async (req, res, next) => {
 
 const VALID_STATUSES = ['new', 'confirmed', 'wip', 'done', 'rejected', 'no_show'];
 
+// Admin — изменить итоговую сумму (скидка / корректировка)
+exports.updatePrice = async (req, res, next) => {
+  try {
+    const { id } = req.params;
+    const { final_price } = req.body;
+
+    const order = await db('orders').where({ id }).first();
+    if (!order) return res.status(404).json({ error: 'Заказ не найден' });
+
+    // null means reset to calculated price; otherwise must be a non-negative integer
+    if (final_price !== null && final_price !== undefined) {
+      const val = parseInt(final_price);
+      if (isNaN(val) || val < 0) {
+        return res.status(400).json({ error: 'Некорректная сумма' });
+      }
+      await db('orders').where({ id }).update({ final_price: val, updated_at: new Date().toISOString() });
+    } else {
+      await db('orders').where({ id }).update({ final_price: null, updated_at: new Date().toISOString() });
+    }
+
+    const updated = await db('orders').where({ id }).first();
+    res.json(updated);
+  } catch (err) {
+    next(err);
+  }
+};
+
 // Admin — смена статуса
 exports.updateStatus = async (req, res, next) => {
   try {
