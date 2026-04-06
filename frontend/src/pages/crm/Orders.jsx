@@ -217,7 +217,7 @@ function OrderCard({ o, onAction, onUpdatePrice, onUpdatePlate, isOpen, onToggle
   );
 }
 
-export default function Orders({ isActive, refreshKey, onNewOrder, onOpenChecklist, initialFilter, initialOrderId }) {
+export default function Orders({ isActive, refreshKey, onRefresh, onNewOrder, onOpenChecklist, initialFilter, initialOrderId }) {
   const [filter, setFilter] = useState(initialFilter || 'all');
   const [search, setSearch] = useState('');
   const [orders, setOrders] = useState([]);
@@ -297,6 +297,7 @@ export default function Orders({ isActive, refreshKey, onNewOrder, onOpenCheckli
       await updateOrderPrice(orderId, final_price === null ? null : parseInt(final_price));
       toastSuccess(final_price === null ? 'Сумма сброшена' : 'Сумма обновлена');
       loadOrders();
+      onRefresh?.();
     } catch (err) {
       toastError(err.message);
     }

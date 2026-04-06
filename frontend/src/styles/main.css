@@ -1009,8 +1009,6 @@ tr:hover td { background:rgba(212,43,43,0.03); }
   .success-panel h3 { font-size:1.6rem; }
 
   /* ── Order cards mobile ── */
-  .ocd-grid { grid-template-columns:1fr; }
-  .ocd-item-full { grid-column:span 1; }
   .ocard-wa { font-size:0.72rem; padding:0.25rem 0.55rem; }
   .orders-toolbar { flex-direction:column; align-items:stretch; gap:0.5rem; }
   .orders-toolbar .search-input { width:100%; }

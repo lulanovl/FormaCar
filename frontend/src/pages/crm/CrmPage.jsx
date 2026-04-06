@@ -9,7 +9,7 @@ import Analytics from './Analytics.jsx';
 
 const PANEL_LABELS = { dash: 'Дашборд', orders: 'Заказы', cal: 'Расписание', clients: 'Клиенты', analytics: 'Аналитика', staff: 'Персонал', prices: 'Прайс-лист' };
 
-export default function CrmPage({ panel, onPanelChange, refreshKey, onNewOrder, onOpenChecklist, onBackSite }) {
+export default function CrmPage({ panel, onPanelChange, refreshKey, onRefresh, onNewOrder, onOpenChecklist, onBackSite }) {
   const [loadedPanels, setLoadedPanels] = useState(new Set(['dash']));
   const [drawerOpen, setDrawerOpen] = useState(false);
   const [ordersFilter, setOrdersFilter] = useState('all');
@@ -150,6 +150,7 @@ export default function CrmPage({ panel, onPanelChange, refreshKey, onNewOrder, 
             <Orders
               isActive={panel === 'orders'}
               refreshKey={refreshKey}
+              onRefresh={onRefresh}
               onNewOrder={onNewOrder}
               onOpenChecklist={onOpenChecklist}
               initialFilter={ordersFilter}
